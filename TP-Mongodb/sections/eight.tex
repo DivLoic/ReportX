@@ -1,0 +1,12 @@
+    Dans mongoDB la suppression peut être effectuée à différent niveaux. 
+\begin{itemize}
+    \item Il est possible de supprimer un document. \newline
+    \begin{tt} db.media.remove(\{"Title":"Different Title"\}) \end{tt} 
+    
+    \item Pour vider toute une collection. \newline
+    \begin{tt} db.media.remove(\{\})  \end{tt} 
+  
+    \item Pour supprimer une collection. \newline
+    \begin{tt} db.media.drop() \end{tt} 
+
+\end{itemize}

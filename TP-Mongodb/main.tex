@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
+\title{Rapport de TP - MongoDB}
+\author{loïc divad}
+\date{December 2014}
+\usepackage[T1]{fontenc}
+\usepackage{lineno}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+
+
+\newenvironment{block}[1]{\par\vspace{5pt}\emph{#1:}} {\par\vspace{5pt}}
+
+\input{javascript.tex}
+\input{JSON.tex}
+\input{mongo.tex}
+\input{python.tex}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Ce TP est associé aux cours électifs de deuxième année et porte sur la base de donnée NoSQL orientée documents, MogoDB. Elle diffère en quelques points avec les outils habituellement utilisés par les DBA tel que les bases ORACLE vu dans le cours de base de donnée avancée. Ne pouvant assiter au cours je rédige ici une partie du TP.
+
+
+\section{Requêtage}
+    
+    \input{sections/two.tex}
+    
+    
+\section{Agregation}
+
+    \input{sections/tree.tex}
+    
+\section{Distinct et regroupement}
+    
+    \input{sections/four.tex}
+    
+\section{Opérateur de comparaison}
+
+    \input{sections/five.tex}
+    
+\newpage
+
+\section{Création d'un index}
+    
+    \input{sections/six.tex}
+    
+\newpage
+
+    \input{output/getIndexes.tex}
+    
+\section{Mise à jour des données - le U de CRUD}
+
+    \input{sections/seven.tex}
+    
+\newpage
+    
+\section{Suppression des données - le D de CRUD}
+    
+    \input{sections/eight.tex}
+    
+\section{Exercice i}
+
+    \input{sections/nine.tex}
+    
+\newpage
+
+    \input{output/lapin.tex}
+
+    \input{sections/nine2.tex}
+    
+\section{Exercice ii - Base de donnée géographique.}
+    
+    \input{sections/ten.tex}
+    
+\section{Replication}
+
+    \input{sections/eleven.tex}
+    
+    
+\section{Le sharding ou partitionement}
+
+    \input{sections/twelve.tex}
+
+\section{Administration et sécurité}
+
+    \input{sections/thirteen.tex}
+    
+\newpage
+
+\section*{\center{Annexe}}
+    
+    \input{annex/nodejs.tex}
+    
+\newpage
+
+    \input{annex/python.tex} 
+    
+    \input{annex/git.tex} 
+    
+\end{document}
+

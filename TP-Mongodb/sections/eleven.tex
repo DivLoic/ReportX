@@ -1,0 +1,69 @@
+\subsection{un maitre avec un ou plusieur esclaves}
+    \par L'une des porpriétés de mongodb est sa capacité à gérer des duplicas pour offrire une base de donnée plus persistante. Une copie des données est alors faites sur un autre server. Mongodb est un système actif/passif\textsuperscript{6}, ses différnents noeuds portent un statut maître ou esclave.
+    
+    \par Pour simmuler les différents noeuds on utilise les ports d'une machine locale que l'on passe au démon. \begin{tt}mongo\end{tt} tout en indiquant le statu du noeud. On récupère quelques lignes de prompte intéressantes.
+    \begin{itemize}
+        \item Lancement du maître: \newline
+        \begin{tt} mongod --master --dbpath .../data/master -port 27016 \end{tt}
+        \item Premier esclace: \newline
+        \begin{tt} mongod --slave --source localhost:27016 --dbpath .../data/slave -port 27018\end{tt}
+        \item Deuxième esclave: \newline
+        \begin{tt} mongod --slave --source localhost:27016 --dbpath .../data/slave2 -port 27020\end{tt}
+    \end{itemize} 
+
+    \input{output/nodes.tex}
+    
+            {\let\thefootnote\relax\footnotetext{
+                \textsuperscript{6}Attention, le model mongo est assez controversé, exemple:\newline
+                Evaluation sévère de mongo sur le post: \textit{\href{https://aphyr.com/posts/284-call-me-maybe-mongodb}{Call me maybe: MongoDB by aphyr}} \newline
+                "...Mongo, un choix plus User firendly que résistant.": \textit{\href{http://bigdatahebdo.azurewebsites.net/episodes/2014/12/30/EP09_Mongodb/}{Tugdual Grall, au Talk BigDataHebdo.}
+                }
+            }
+                
+            
+\newpage
+
+    \par La base local donne des infos sur l'intence mongodb. l'instruction db.slaves.find() nous renvoies les propriétés des esclaves stokés dans mongodb. 
+    
+    \begin{lstlisting}[language=JSON, caption=]
+> db.slaves.find().pretty()
+{
+	"_id" : ObjectId("54ba60891fd9ebd9f64c30ef"),
+	"config" : {
+		"host" : "127.0.0.1:50358",
+		"upgradeNeeded" : true
+	},
+	"ns" : "local.oplog.$main",
+	"syncedTo" : Timestamp(1421501959, 1)
+},
+{
+	"_id" : ObjectId("54ba6df131f0c24be9fe3bb0"),
+	"config" : {
+		"host" : "127.0.0.1:51059",
+		"upgradeNeeded" : true
+	},
+	"ns" : "local.oplog.$main",
+	"syncedTo" : Timestamp(1421504048, 1)
+}
+
+    \end{lstlisting}
+    
+\begin{tabularx}{14cm}{|c|p{3cm}|X|}
+    \hline
+    1 & "host" & Nom et port du noeud esclave. \\
+    \hline
+    2 & "upgradeNeeded" & Etat de la réplication des neuds. "False" si le neud est à jour. \\
+    \hline
+    3 & "ns" & Collection contenant les logs liés aux réplication \\
+    \hline
+    4 & "syncedTo" & Dernière date de sychronisation. \\
+    \hline
+\end{tabularx}
+
+    \par
+        Pour tester la réplication, sur le noeud maître on insert un nouveau document dans une nouvelle collection d'une base encore inexistante. Mongodb créer automatiquement la base puis la réplique sur les autres noeuds. On la retrouve en se connectant aux esclaves et en appliquant la méthode show dbs.
+
+\subsection{Plusieur maîtres et un esclave}
+    \par Dans cette organisation le travaille s'effectue dans le sens inverse. Au lieu de lancer des slaves avec une adresse sources et attendre l'écriture des documents local.slaves on lance les maîtres et on insert leur adresse dans la collection local.sources d'un slave: \begin{tt}  db.sources.insert(host:"ip.a.dre.ss:port")\end{tt} \newline
+ Une fois insérée la connection s'effectue et les documents se complètent avec l'\_id et la date du dernier update. On retrouve alors les collections des maîtres sur le neud esclave. Il est également possible de présciser dans les documents local.sources les collections à récupérer avec l"option "only".
+    \par On retrouve en suite l'adresse slave dans la collection local.slave des maîtres. Chaque document ajouté est recopié.  

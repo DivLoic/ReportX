@@ -1,0 +1,25 @@
+\begin{itemize}
+    \item \begin{tt} db.media.find(\{Released:\{\$gt:2000\}\},\{"Cast":0\}) \end{tt} \newline
+    Renvoie tous les éléments réalisés après l"an 2000 sans afficher leur casting.
+    \item \begin{tt} db.media.find(\{Released:\{\$gte:1990,\$lt:2010\}\},\{"Cast":0\}) \end{tt} \newline
+    Renvoie tous les documents réalisés entre 1990 et 2010.
+    \item \begin{tt} db.media.find(\{Type:"Book",Author:\{\$ne:"Plugge, Eelco"\}\}) \end{tt} \newline
+    Sélectionne tous les documents de type "book" dont les auteurs ne sont pas Plugge et Eelco.
+    \item \begin{tt} db.media.find(\{Released:\{\$in:["1999","2008","2009"]\}\},\{"Cast":0\}) \end{tt} \newline
+    Renvoie les éléments ayant une date de réalisation dans la liste suivant "\$in ".
+    \item \begin{tt} db.media.find(\{Released:\{\$nin:["1999","2008","2009"]\},Type:"DVD"\},\{"Cast":0\}) \end{tt}
+    Renvoie tous les dvd de 1999, 2008 et 2009.
+    \item \begin{tt} db.media.find(\{\$or:[\{"Title":"Toy Story 3"\},\{"ISBN":
+"987-1-4302-3051-9"\}]\}) \end{tt}
+    \item \begin{tt} db.media.find(\{"Type":"DVD",\$or:[\{"Title":"Toy Story 3"\},\{"ISBN":"987-1-4302-3051-9"\}]\})
+\end{tt} \newline
+    \end{itemize}
+    \par
+    Les deux dernières requêtes renvoient les documents si le titre ou l"ISBN respecte la condition. La dernière est plus selective car elle ne concerne que les documents de type dvd. La condition "type :DVD" est en produit logique avec la condition préscédente.
+    \newline
+    \par 
+    L'argument \textbf{\$slice} se place au sein d'une projection et peut prendre la forme d'un intervale [m,n] pour limiter les résultats de la requête. \newline
+    \par 
+    L'option \textbf{\$size} concerne les tableaux, c'est une condition sur le nombre délements. Ainsi la requête suivante renvoie tous les documents ayant un champ tracklist composé de 2 titres:  \begin{tt} db.media.find(\{Tracklist:\{\$size:2\}\}) \end{tt} \newline
+    \par 
+    L'option \textbf{\$exist} ici est assez différente de WHERE EXIST que l'on connait en SQL. Elle porte sur l'existence du champs dans un document et non sur la valeur. Le format NoSQL nous libère du traditionel schéma. Il n'y a pas de tables avec des champs obligatoires laissés à Null si une valeur est manquante. Il se peut donc que certain documents, en fonction de leur type (CD, DVD, Livre) présente ou pas certain champs comme Tracklist. La requête suivante retourne donc tous les documents susceptibles d'avoir un auteur: \begin{tt} db.media.find(\{Author:\{\$exists:true\}\}) \end{tt} \newline

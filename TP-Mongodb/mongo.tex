@@ -1,0 +1,35 @@
+\usepackage{listings}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\lstdefinelanguage{Mongo}{
+  basicstyle=\footnotesize\ttfamily,
+  keywords={typeof, new, true, false, catch, function,  null, catch, switch, var, if, in, while, do, else, case, break, collection},
+  keywordstyle=\color{cyan}\bfseries,
+  ndkeywords={class, return, export, boolean, throw, implements, import, this, db},
+  ndkeywordstyle=\color{blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{Plum}\ttfamily,
+  stringstyle=\color{OliveGreen}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  numbers=left
+}
+
+\lstset{
+   language=Mongo,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\color{black}\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}

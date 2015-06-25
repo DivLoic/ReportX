@@ -1,0 +1,19 @@
+\subsection{Backup}
+    \par Dans cette partie on découvre les commandes \begin{tt}mongodump\end{tt} et \begin{tt}mongorestore\end{tt} qui permettent respectivement de sauvegader et rétablir une ou plusieur bases de données (celon les options). Un dump de l'instence mongo donne une collection et son system.indexes au format .bson et fichier de metta données au format .json.
+    
+    \begin{block}{Note} Le démon mongod doit être lancé pour passer ces commandes.
+    \end{block}
+    
+\subsection{Authetification}
+    \par Dans cette partie la démarche indiquée est dépréciée. Connection à la base de donnée admin (use admin) et utilisation de la méthode .addUser(). A la place il est conseillé de créer un document de la manière suivnate. 
+
+\begin{lstlisting}[language=JSON, caption=Création d"un user]
+use admin
+db.createUser(
+  {
+    user: "siteUserAdmin",
+    pwd: "password",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+\end{lstlisting}

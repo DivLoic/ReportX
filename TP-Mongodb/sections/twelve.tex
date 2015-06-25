@@ -1,0 +1,30 @@
+MongoDB en plus de dupliquer les données propose également de les fragmenter et les répartire sur des noeuds distincts. Il est alors possible séparer une base en méttant les collections sur des machines différentes (scaling vertical). Ou disposer d'une partie des documents de toutes les collestions sur chaque noeuds (scaling horizontale).\newline
+Pour cette partie on va créer un server de configuration et deux servers de shard: \newline
+\begin{tt}
+    mongod --port 27022 --dbpath .../data/config -configsvr \newline
+    mongod --configdb localhost:27022 --port 27021 --chunkSize 1 \newline
+    mongod --port 27023 --dbpath .../data/shard0 –shardsvr \newline
+    mongod --port 27024 --dbpath .../data/shard1 --shardsvr \newline
+\end{tt}
+
+    L"oprtion --chunkSize donne une taille maximal aux collections. par défauts elles sont de 64 bits. En réduisant les tailles des collections on partionne plus rapidement.
+
+    En se connnectant au controlleur on accède à un shell mongos (mongodb Shards). Une instance mongo qui permet la configuration des shards. Après la connection à admin, et le lancement de la commande: \newline
+    \begin{tt}db.runCommand(\{ addshard:"adress:port",allowLocal:true\})\end{tt} \newline
+On retrouve les shards que l'on a lancé dans la collection: config.shards:
+\begin{lstlisting}[language=JSON, caption=]
+mongos> use config 
+switched to db config 
+mongos> db.shards.find() 
+{ "_id" : "shard0000", "host" : "localhost:27023" }
+{ "_id" : "shard0001", "host" : "localhost:27024" }
+\end{lstlisting} 
+
+Pour la suite du TP on créer la base de donnée phone et on autorise le sharding de cette base avec la commande \begin{tt}db.runCommande({enablesharding:"base"})\end{tt}. On définit en suite la fonction qui génère les documents de la bases phones. 
+
+\begin{block}{Remarque} Pour bien comprendre la diffusions des actions depuis le controlleur on se plug au mongos via RoboMongo. En faisant un .count() on retrouve 200 000. Puis en cosole on constate l'exitance des bases et collections sur les serveurs shards. On trouve respectivement sur les ports 27023 et 27024: 94627 et 105373 docs.\newline
+(105373 + 94627 = 200 000)
+\end{block}
+
+\begin{block}{Vérificatio} Les testes demandés reviennent exactement à la remarque préscédente.
+\end{block}

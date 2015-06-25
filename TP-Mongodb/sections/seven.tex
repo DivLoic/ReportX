@@ -1,0 +1,13 @@
+    Pour faire la mise à jour d'un ou plusieur documents on a à notre disposition la fonction \textbf{.update()}. C'est une méthode d'objet collection et non celle d'un curseur renvoyé par .find() ou .group(). Cette fonction prend les arguments suivants: \textbf{query}, \textbf{object} et \textbf{option}. \newline
+
+    \begin{lstlisting}[language=Mongo, caption=fonction update().]
+db.collection.update(
+    { type: "",
+      size: {$gt : 30} 
+    },
+    {
+        multi: true, // modifie tous les documents trouve par query
+        upsert: true, // creer le document si il n"existe pas.
+    }
+);
+    \end{lstlisting}

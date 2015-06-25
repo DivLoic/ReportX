@@ -1,0 +1,18 @@
+\begin{lstlisting}[language=JSON, caption= Prompt renvoyé par le noeud maître]
+
+
+mongod --master --dbpath ~/Lmdapp/data/mongodb/data/master -port 27016
+2015-01-17 [initandlisten] db version v2.6.6
+[ ... ]
+2015-01-17 [initandlisten] waiting for connections on port 27016
+[ ... ]
+2015-01-17 [clientcursormon]  connections:0
+2015-01-17 [initandlisten] connection accepted from 127.0.0.1:50358 #1 (1 connection now open)
+2015-01-17 [slaveTracking] build index on: local.slaves properties: { v: 1, key: { _id: 1 }, name: "_id_", ns: "local.slaves" }
+[ ... ]
+2015-01-17 [clientcursormon]  connections:1
+2015-01-17 [initandlisten] connection accepted from 127.0.0.1:50731 #2 (2 connections now open)
+2015-01-17 [slaveTracking] build index on: local.slaves properties: { v: 2, key: { _id: 2 }, name: "_id_", ns: "local.slaves" }
+[ ... ]
+
+\end{lstlisting}

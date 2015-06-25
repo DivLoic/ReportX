@@ -1,0 +1,56 @@
+
+\subsection*{Map / Reduce avec Pymongo\textsuperscript{11}}
+
+\par Pymongo est une dépendence python qui permet de s'adrésser à mogodb. Une fois L'instence mongo lancée L'import de ce module permet la connection et donne accès à des fonctions mongo.
+
+\begin{tt} >>>>>> Import mongo\end{tt}
+
+\par Pour faire un exemple on propose de reprendre la fonction map reduce de pymongo appliquée à la base de lapin de la partie 9. Pour lancer le script:
+
+\begin{tt} > python mapredbunny.py\end{tt}
+
+\lstset{language=python}
+\begin{lstlisting}
+##########################################################
+#     EXEMPLE DE MAP / REDUCE SUR MONGODB                #
+##########################################################
+
+# Import du connecteur et du traducteur bson #
+import pymongo
+from bson.code import Code # Traduction du code Js compris par mongodb #
+
+# Connection a la bonne BDD #
+db = pymongo.MongoClient().lapins 
+
+# ecriture du mappeur #
+mapp = Code(""" 
+            function() {
+                this.regime.forEach(function(r){
+                    emit(r,1);
+                });
+            }
+            """)
+
+# ecriture du reduceur #
+red = Code(""" 
+            function(key, tab) {
+                var sum = 0;
+                for(var i; i < tab.length - 1; i++){
+                    sum += values[i];
+                }
+                return sum;
+            }
+
+            """)
+
+# Lancement de l'agregation #
+res = db.france.map_reduce(mapp, red, "mapred_bunny", query={"genre":"h"})
+#
+Le resultat est disponible
+dans la collection "mapred_bunny"
+#
+\end{lstlisting}
+
+\par La collection retour est une suite de document contenant: un nom d'alliment et le nombre de lapins mâles qui en mange. Ce n'est pas très util car ce n'est qu'un exemple. Il faut s'imaginer que la donnée est maintenant bien agrégée pour réaliser de super grafiques sur le régime des lapins de la collection france.
+
+{\let\thefootnote\relax\footnotetext{\textsuperscript{11} \textit{{\href{http://api.mongodb.org/python/current/?_ga=1.152073017.1419368140.1410728889}{ API du connecteur "pymongo"}.}}}

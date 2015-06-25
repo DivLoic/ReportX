@@ -1,0 +1,40 @@
+L'exercice tourne autour d'une base de donnée contenant des lapins. Pour la création de la base de données et l’insertion je propose un script js qui sera joué de la façon suivante. \newline
+    \begin{tt} mongo exo\_lapin.js \end{tt} \newline
+    les autres requêtes seront exécutées dans le shell mongo. Après la création de la base de donnée on demande l’affichage de tous les documents\newline
+    
+\begin{lstlisting}[language=JavaScript, caption= Création de la base de donnée "lapin"]
+var db = connect("lapins");
+// Connection a la base mongo.
+
+//creation en dure de la base.
+var all_rabbits = [
+
+  {nom: "leny", genre: "f", ville: "Lyon", regime: ["carotte",
+                                                    "courgette"
+                                                    ],
+   poids: 4, taille: 20 },
+
+  {nom: "bunny", genre: "h", ville: "Paris", regime: [ ],
+   poids: "3", taille: ""},
+
+  {nom: "olto", genre: "h", ville: "Paris", regime: ["raisin",
+                                                     "carotte",
+                                                     "salade"
+                                                     ],
+   poids: 5, taille: 25 }
+];
+
+// Pour charque lapin on insert une ligne du JSON
+all_rabbits.forEach(function(rabbit){
+  db.france.insert(rabbit);
+})
+
+print("insertion terminee.");
+
+//affichage en console du contenut de la base.
+var lapin_fr = db.france.find();
+
+lapin_fr.forEach(function(m){
+  printjson(m);
+});
+\end{lstlisting}

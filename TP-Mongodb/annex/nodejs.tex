@@ -1,0 +1,64 @@
+\subsection*{SQL to Mongodb, avec Node.js\textsuperscript{7}}
+
+\par Une des problématiques apportées par les technos NoSQL est la conversion des anciennes base rellationnelles. Pour les petits acteurs du web qui passent sur des architechtures scalables avec des languages serveur comme node, la migration s'accompagne souvent d'un changement de base de données.
+
+\par Bien que mongoDB ai son propre module node\textsuperscript{8} je propose ici un module concurrent \textbf{mongoose} \textsuperscript{9} qui lui nécessite la création d'un schéma. Le cas d'utilisation est simple: Si on recopie une une base SQL, il est plus simple de crée un shéma avant de la pousser dans Mongo.
+
+\par Je propose donc le code suivant qui peut être lancé de la manière suivante:\newline
+\begin{tt} > Node bank.js \end{tt} Le but est de pouvoir insérer dans mongoDB un export au format .Json d'une base MySQL, exemple:
+
+\begin{lstlisting}[language=JSON, caption=Une ligne de l'export.]
+{"Bid":"982","account_number":982,"balance":16511,"firstname":"Buck","lastname":"Robinson","age":24,...,"email":"buckrobinson@calcu.com"}
+\end{lstlisting}
+
+\begin{lstlisting}[language=JavaScript, caption=SQL to MongoDb avec le module Mongoose.]
+mongoose = require('mongoose'); //import du module mongoose
+fs = require('fs');            //
+
+mongoose.connection.on('error', function(){// si il a une erreur.
+  console.log('Failed to Connect to the BDD');
+});
+
+mongoose.connection.on('open', function(){// a la connection
+  console.log('Connection to the BDD');
+});
+
+mongoose.connect('mongodb://localhost/bank'); // mongo> use bank
+
+var count_model = mongoose.Schema({ //definition du schema
+  'Bid':String,
+  'account_number':Number,
+  'balance':Number,
+  'firstname':String,
+  'age':Number,
+  '...'
+  'state':String
+});
+
+//Array ---> mongoose.model.Object
+var account = mongoose.model('account', count_model);
+console.log('Building Schema');
+
+fs.exists('./accounts.json', function (exists) {
+  //Si le fichier existe, L'ouvrire et Le lire
+  fs.readFile('./accounts.json', function(err, data){
+    var bank = JSON.parse(data);
+    bank.forEach(function(d){
+      var row = new account(d);
+      row.save(function (err) {
+        if(err)console.log('Inserting Error!');
+      });
+    });
+  });
+});
+\end{lstlisting}
+
+{\let\thefootnote\relax\footnotetext{\textsuperscript{7} \textit{\href{http://nodejs.org}{http://nodejs.org}}}}
+{\let\thefootnote\relax\footnotetext{\textsuperscript{8} \textit{\href{http://mongodb.github.io/node-mongodb-native/}{Native Node module for MongoDB}}}}
+{\let\thefootnote\relax\footnotetext{\textsuperscript{9} \textit{\href{http://mongoosejs.com}{Mongoose: mongodb object modeling for node.js}}}}
+{\let\thefootnote\relax\footnotetext{\textsuperscript{10} \textit{Retrouvez l'exemple complet{\href{https://github.com/bly2k/files/blob/master/accounts.zip?raw=true}{ \textbf{ici}}.}}}
+
+\newpage
+
+
+

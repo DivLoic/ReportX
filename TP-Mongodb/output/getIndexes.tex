@@ -1,0 +1,38 @@
+Résultat de la méthode .getIndexes() est une liste des indexes avec les propriétés v version d’index (cette version dépend de la version de mongodb). key est le champ d’indexation, name le nom de l’index et ns pour name space, base de donnée [point] la collection.
+
+\begin{lstlisting}[language=JSON, caption=Résultat de la méthode .getIndexes()]
+{
+    "0" : {
+        "v" : 1,
+        "key" : {
+            "id" : 1
+        },
+        "name" : "id",
+        "ns" : "library.media"
+    },
+    "1" : {
+        "v" : 1,
+        "key" : {
+            "Title" : 1
+        },
+        "name" : "Title1",
+        "ns" : "library.media"
+    },
+    "2" : {
+        "v" : 1,
+        "key" : {
+            "Title" : -1
+        },
+        "name" : "Title -1",
+        "ns" : "library.media"
+    },
+    "3" : {
+        "v" : 1,
+        "key" : {
+            "Tracklist.Title" : 1
+        },
+        "name" : "Tracklist.Title 1",
+        "ns" : "library.media"
+    }
+}
+\end{lstlisting}

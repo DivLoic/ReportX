@@ -1,0 +1,26 @@
+On applique quelques requêtes sur cette base.
+\begin{itemize}
+    \item Trouvez tous les lapins mâles? \newline
+        \begin{tt} db.france.find(\{"genre":"m"\}); \end{tt} 
+        
+    \item Nombre de lapins qui aiment les carottes et qui pèsent plus de 4kg \newline
+        \begin{tt} db.france.find(\{regime :\{\$all:[‘carotte’]\},poids:\{\$gt:4\}}).count();\end{tt}\newline
+        Le compte donne 1, car ici on interprète plus par strictement supérieur. Si on remplace \$gt par \$gte on obtient 2.
+        
+    \item Les lapins qui aiment les courgettes ou les raisins ou qui n’ont pas de champ « ville »\newline
+        \begin{tt} db.france.find(\{\$or:[{regime:\{\$in:["salade","courgette"]\}\},\{ville:null\}]\}); \end{tt}
+        \item Tous les lapins qui n’aiment pas la salade.\newline
+        \begin{tt} db.france.find(\{regime:\{\$nin:["salade"]\}\}); \end{tt} \newline
+        Leny et bunny font les difficiles.
+        
+    \item Nous savons que Bunny se trouve en France, rajouter un champ pays à ce document.
+        \begin{tt} db.france.update(\{"nom":"bunny"\},\{\$set:\{"departement":"Île-de-France"\}\}); \end{tt}
+        N’ayant pas de nom de collection je l’ai appelé france. On traite donc cette question avec le nom du département.
+
+    \item Supprimer le champ « taille », s’il existe, de tous les documents.\newline
+        \begin{tt} db.france.update(\{\},\{\$unset:\{taille:""\}\},false,true); \end{tt}
+        
+    \item Supprimer la base de données.\newline
+        \begin{tt} db.france.drop() \end{tt} \newline
+        … plus de petits lapins.
+    \end{itemize}

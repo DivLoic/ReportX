@@ -1,0 +1,8 @@
+\begin{itemize}
+        \item \begin{tt} db.media.count() \end{tt} \newline
+        Compte le nombre de documents dans la collection.
+        \item \begin{tt} db.media.find(\{Publisher:"Apress",Type:"Book"\}).count()\end{tt} \newline
+        Compte le nombre de documents de type livre ET d’éditeur Apresss.
+        \item \begin{tt} db.media.find(\{Publisher:"Apress",Type:"Book"\}).skip(2).count(true) \end{tt} \newline
+        Compte le nombre de documents de type livre ET d’éditeur Apresss sans compter les deux premiers resultats.
+    \end{itemize}
