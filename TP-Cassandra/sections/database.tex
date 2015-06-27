@@ -1,0 +1,13 @@
+\subsection{Description de l'espace de clef}
+\par Pour mieu comprendre la structure de donnée dans cassandra
+cette partie propose un petit point sur ce qu'est un espace de clef.
+On propose également de décrire la commande de création proposé dans le TP: \newline
+\begin{tt}
+\begin{alltt}
+cqlsh> CREATE KEYSPACE TP WITH REPLICATION = \{
+		'class' : 'SimpleStrategy',
+		'replication\_factor' : '1'
+\};
+\end{alltt}
+\end{tt}
+\subsection{le CQL, langage de requête Cassandra}
