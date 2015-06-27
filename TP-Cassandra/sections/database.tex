@@ -11,3 +11,15 @@ cqlsh> CREATE KEYSPACE TP WITH REPLICATION = \{
 \end{alltt}
 \end{tt}
 \subsection{le CQL, langage de requête Cassandra}
+
+
+\par 
+\begin{block}{remarque}
+On note que l\rq utilisation de double quotes (") dans la ligne de commande provoque l'erreur: \newline
+\begin{tt}
+\textcolor{red}{
+SyntaxException: <ErrorMessage code=2000 [Syntax error in CQL query]
+message="line 1:58 extraneous input hello world expecting ) (...) values (1,1 hello world[)]...)>
+}
+\end{tt}
+\end{block}
