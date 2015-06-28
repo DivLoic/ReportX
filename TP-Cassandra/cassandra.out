@@ -4,3 +4,4 @@
 \BOOKMARK [1][-]{section.3}{Base de donn\351e}{}% 4
 \BOOKMARK [2][-]{subsection.3.1}{Description de l'espace de clef}{section.3}% 5
 \BOOKMARK [2][-]{subsection.3.2}{le CQL, langage de requ\352te Cassandra}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.3}{Clefs composites}{section.3}% 7

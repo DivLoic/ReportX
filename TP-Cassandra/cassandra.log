@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.29)  28 JUN 2015 11:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.29)  28 JUN 2015 19:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -777,7 +777,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 20--31
 
  []
 
-(./sections/gui.tex) (./sections/database.tex
+(./sections/gui.tex <img/ip.png, id=33, 452.69125pt x 177.66376pt>
+File: img/ip.png Graphic file (type png)
+
+<use img/ip.png>
+Package pdftex.def Info: img/ip.png used on input line 14.
+(pdftex.def)             Requested size: 226.34506pt x 88.83165pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[1
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<img/select.png, id=48, 530.98375pt x 234.8775pt>
+File: img/select.png Graphic file (type png)
+ <use img/select.png>
+Package pdftex.def Info: img/select.png used on input line 29.
+(pdftex.def)             Requested size: 265.49121pt x 117.43846pt.
+)
+(./sections/database.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--6
 
  []
@@ -786,39 +805,52 @@ LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 10.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-) [1
+) [2 <./img/ip.png> <./img/select.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 31--48
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (48.97066pt too wide) in paragraph at lines 53--61
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--48
+
+ []
+
+<img/cqlsh.png, id=59, 512.91624pt x 327.2225pt>
+File: img/cqlsh.png Graphic file (type png)
+ <use img/cqlsh.png>
+Package pdftex.def Info: img/cqlsh.png used on input line 51.
+(pdftex.def)             Requested size: 256.45749pt x 163.61084pt.
+
+Overfull \hbox (48.97066pt too wide) in paragraph at lines 59--67
 []\T1/cmtt/m/n/10 SyntaxException: <ErrorMessage code=2000 [Syntax error in CQL
  query] message="line
  []
 
 
-Overfull \hbox (54.21938pt too wide) in paragraph at lines 53--61
+Overfull \hbox (54.21938pt too wide) in paragraph at lines 59--67
 \T1/cmtt/m/n/10 1:58 extraneous input hello world expecting ) (...) values (1,1
  hello world[)]...)>
  []
 
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 38.
- [2]
+ [3 <./img/cqlsh.png>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 38.
  (./cassandra.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 38.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 38.
 Package rerunfilecheck Info: File `cassandra.out' has not changed.
-(rerunfilecheck)             Checksum: 02F17DFFF14ADDC3D67C091A036058A1;388.
+(rerunfilecheck)             Checksum: 7FBD8DEEBAB10806990F25DAF3726A12;453.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 38.
  ) 
 Here is how much of TeX's memory you used:
- 7668 strings out of 493117
- 112208 string characters out of 6135433
+ 7693 strings out of 493117
+ 112523 string characters out of 6135433
  200993 words of memory out of 5000000
- 11008 multiletter control sequences out of 15000+600000
+ 11023 multiletter control sequences out of 15000+600000
  13397 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,6n,28p,264b,466s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,8n,28p,264b,453s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<
 /usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></u
@@ -829,10 +861,10 @@ al/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local
 /texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/t
 exlive/2014/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/tex
 live/2014/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on cassandra.pdf (2 pages, 147962 bytes).
+Output written on cassandra.pdf (3 pages, 290632 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
- 69 compressed objects within 1 object stream
- 9 named destinations out of 1000 (max. 500000)
- 49 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 102 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
+ 72 words of extra memory for PDF output out of 10000 (max. 10000000)
 

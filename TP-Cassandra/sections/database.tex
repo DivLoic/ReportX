@@ -13,7 +13,7 @@ cqlsh> CREATE KEYSPACE TP WITH REPLICATION = \{
 \end{alltt}
 \end{tt}
 
-\textcolor{ForestGreen}{\textbf{Definition}}(Keyspace): Il s'aggit de la plus grande structure de données de cassandra. Elle est comparable au base (ou schéma)
+\textcolor{ForestGreen}{\textbf{Definition}}(Keyspace): Il s'aggit de la plus grande structure de données de cassandra. Elle est comparable aux bases (ou schéma)
 dans les systemes classiques ou dans les systèmes document (mongodb, couchdb). Elle contient des familles de colonnes,  qui elles, représentent
 la séparation entre les tables (mysql) ou les collections (mongodb). Chaque ligne insérée présente des informations pour certaines colonnes
 d'un famille de colonnes.
@@ -32,12 +32,12 @@ TP il y a user, follows et message.
 Si il doit y avoir de la réplication le \textit{partitioner} rédistrubura automatiquement sur le noeud suivant.\newline La commande DESCRIBE nous permet d'avoir la liste de keyspaces.\newline
 \begin{tt} 
 \indent cqlsh> DESCRIBE KEYSPACES; \newline 
-\indent system\_traces  OpsCenter  system  \textcolor{red}{tp}\end{tt}\newline
+\indent system\_traces  OpsCenter  system  \textcolor{red}{tp}\end{tt}\newline \newline
 On peut ensuite accéder aux familles de colonnes sur un espace de clefs particulier.\newline
 \begin{tt}
 \indent cqlsh> use TP; \newline 
 \indent cqlsh:tp> DESCRIBE TABLES;\newline 
-\indent follows  message  user\end{tt}\newline
+\indent follows  message  user\end{tt}\newline \newline
 On peut ensuite retrouver les colonnes d'une famille en particulier. \newline
 \begin{tt}
 \indent cqlsh:tp> DESCRIBE TABLE user; \newline 
@@ -45,6 +45,12 @@ On peut ensuite retrouver les colonnes d'une famille en particulier. \newline
 \indent \indent user\_id bigint PRIMARY KEY, \newline
 \indent \indent user\_name text \newline 
 \indent )\end{tt} 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{img/cqlsh.png}
+\caption{Quelques commandes cql.}
+\end{figure}
 
 \subsection{le CQL, langage de requête Cassandra}
 
@@ -59,3 +65,6 @@ message="line 1:58 extraneous input hello world expecting ) (...) values (1,1 he
 }
 \end{tt}
 \end{block}
+
+\subsection{Clefs composites}
+
