@@ -1,15 +1,51 @@
 \subsection{Description de l'espace de clef}
-\par Pour mieu comprendre la structure de donnée dans cassandra
-cette partie propose un petit point sur ce qu'est un espace de clef.
+\par Pour mieux comprendre la structure de donnée dans cassandra
+cette partie propose un petit point sur ce qu'est un espace de clef,
+une brève définition et une comparaison avec d'autre systemes connus.
 On propose également de décrire la commande de création proposé dans le TP: \newline
+
 \begin{tt}
 \begin{alltt}
 cqlsh> CREATE KEYSPACE TP WITH REPLICATION = \{
-		'class' : 'SimpleStrategy',
-		'replication\_factor' : '1'
+\indent		'class' : 'SimpleStrategy',
+\indent		'replication\_factor' : '1'
 \};
 \end{alltt}
 \end{tt}
+
+\textcolor{ForestGreen}{\textbf{Definition}}(Keyspace): Il s'aggit de la plus grande structure de données de cassandra. Elle est comparable au base (ou schéma)
+dans les systemes classiques ou dans les systèmes document (mongodb, couchdb). Elle contient des familles de colonnes,  qui elles, représentent
+la séparation entre les tables (mysql) ou les collections (mongodb). Chaque ligne insérée présente des informations pour certaines colonnes
+d'un famille de colonnes.
+
+\begin{block}{Propriétées}
+\begin{itemize}
+\item \textbf{Replication factor}: définit le nombre de noeud possédant un copie de la donnée. 
+\item \textbf{Replica placement strategy}: il s'agit du mode de répartition des réplicats. Il en 
+existe trois. simple strategy,  old network topology strategy, network topology strategy
+\item \textbf{Column families}: Liste des familles des colonnes associées. Dans notre cas sur le keyspace
+TP il y a user, follows et message.
+\end{itemize}
+\end{block}
+
+\par La commande de création du Keyspace TP signifie donc: crée l'espace de clefs TP dont les lignes ne sont présentes que sur un noeud.
+Si il doit y avoir de la réplication le \textit{partitioner} rédistrubura automatiquement sur le noeud suivant.\newline La commande DESCRIBE nous permet d'avoir la liste de keyspaces.\newline
+\begin{tt} 
+\indent cqlsh> DESCRIBE KEYSPACES; \newline 
+\indent system\_traces  OpsCenter  system  \textcolor{red}{tp}\end{tt}\newline
+On peut ensuite accéder aux familles de colonnes sur un espace de clefs particulier.\newline
+\begin{tt}
+\indent cqlsh> use TP; \newline 
+\indent cqlsh:tp> DESCRIBE TABLES;\newline 
+\indent follows  message  user\end{tt}\newline
+On peut ensuite retrouver les colonnes d'une famille en particulier. \newline
+\begin{tt}
+\indent cqlsh:tp> DESCRIBE TABLE user; \newline 
+\indent CREATE TABLE tp.user (\newline 
+\indent \indent user\_id bigint PRIMARY KEY, \newline
+\indent \indent user\_name text \newline 
+\indent )\end{tt} 
+
 \subsection{le CQL, langage de requête Cassandra}
 
 
