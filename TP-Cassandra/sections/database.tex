@@ -28,7 +28,7 @@ TP il y a user, follows et message.
 \end{itemize}
 \end{block}
 
-\par La commande de création du Keyspace TP signifie donc: crée l'espace de clefs TP dont les lignes ne sont présentes que sur un noeud.
+\par La commande de création du Keyspace TP signifie donc: créer l'espace de clefs TP dont les lignes ne sont présentes que sur un noeud.
 Si il doit y avoir de la réplication le \textit{partitioner} rédistrubura automatiquement sur le noeud suivant.\newline La commande DESCRIBE nous permet d'avoir la liste de keyspaces.\newline
 \begin{tt} 
 \indent cqlsh> DESCRIBE KEYSPACES; \newline 
@@ -67,4 +67,22 @@ message="line 1:58 extraneous input hello world expecting ) (...) values (1,1 he
 \end{block}
 
 \subsection{Clefs composites}
+Via Devcenter on insert les lignes demandées comme sur les figures suivantes. \newline
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.7]{img/add_patrick.png}
+\caption{Ajout de l'utilisateur patrick suivit par georges.}
+\end{figure}
+
+Puis on vérifie la table des relations d'abonnement \lq follows\rq.
+La premier relation d'abonnement (georges suit sylvain) à été supprimée.
+En effet, lors de la définition de la famille de clef follows, la colonne
+follower\_id est déclarée comme une clef primaire, elle est donc unique. Autrement dit
+On ne peut suivre qu'une seule personne à la fois.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{img/solo_key.png}
+\caption{Unique relation de la table follows après l'ajout de patrick.}
+\end{figure}
+
 

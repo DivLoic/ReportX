@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1435513794 "cassandra.tex" "cassandra.pdf" "cassandra" 1435513795
+["pdflatex"] 1435846220 "cassandra.tex" "cassandra.pdf" "cassandra" 1435846221
   "/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2014/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -54,17 +54,19 @@
   "/usr/local/texlive/2014/texmf-dist/tex/latex/upquote/upquote.sty" 1334873510 1048 517e01cde97c1c0baf72e69d43aa5a2e ""
   "/usr/local/texlive/2014/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/local/texlive/2014/texmf-dist/tex/latex/wrapfig/wrapfig.sty" 1137111090 26220 3701aebf80ccdef248c0c20dd062fea9 ""
-  "cassandra.aux" 1435513795 1750 d02a3577fc105f7d510ba400f44ef6ba ""
-  "cassandra.out" 1435513795 453 7fbd8deebab10806990f25daf3726a12 ""
+  "cassandra.aux" 1435846221 2044 9b000ab2a09a20701cafcbc9c1664e2a ""
+  "cassandra.out" 1435846221 453 7fbd8deebab10806990f25daf3726a12 ""
   "cassandra.tex" 1435435182 735 1ed004923e6bacd0446e5d22028ed098 ""
+  "img/add_patrick.png" 1435845082 32053 676c90de4b4293e94e48629ebc8db0df ""
   "img/cqlsh.png" 1435485429 93993 75865c50f4220e89e52b674da9d860b4 ""
   "img/ip.png" 1435512644 50326 293243a957a777d49d437fc3a69612e6 ""
   "img/select.png" 1435513731 114137 903abacae6e64c35d094a234f37e3c80 ""
-  "sections/database.tex" 1435506175 3068 9de133ac2ef4d7af86de8473f9ee24d5 ""
-  "sections/gui.tex" 1435513790 1740 cee445379b71940e8cfa9e38b4769911 ""
-  "sections/installation.tex" 1435481569 1468 4e03abf59e80332c4878d44dba2fe30c ""
+  "img/solo_key.png" 1435845431 32611 d62543e9eef600fe06fc5393c3406f4c ""
+  "sections/database.tex" 1435846217 3837 77816ad1671ba7856c02d1da4fd564f2 ""
+  "sections/gui.tex" 1435844256 1745 f7f683d30893b32d4c40c94159312d29 ""
+  "sections/installation.tex" 1435844009 1469 d41467e35e94983eff94f6bebb4d858a ""
   (generated)
-  "cassandra.log"
   "cassandra.aux"
-  "cassandra.pdf"
   "cassandra.out"
+  "cassandra.pdf"
+  "cassandra.log"
