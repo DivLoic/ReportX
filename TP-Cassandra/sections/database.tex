@@ -13,7 +13,8 @@ cqlsh> CREATE KEYSPACE TP WITH REPLICATION = \{
 \end{alltt}
 \end{tt}
 
-\textcolor{ForestGreen}{\textbf{Definition}}(Keyspace): Il s'aggit de la plus grande structure de données de cassandra. Elle est comparable aux bases (ou schéma)
+\textcolor{ForestGreen}{\textbf{Definition}}(Keyspace): Il s'aggit de la plus grande 
+structure de données de cassandra. Elle est comparable aux bases (ou schéma)
 dans les systemes classiques ou dans les systèmes document (mongodb, couchdb). Elle contient des familles de colonnes,  qui elles, représentent
 la séparation entre les tables (mysql) ou les collections (mongodb). Chaque ligne insérée présente des informations pour certaines colonnes
 d'un famille de colonnes.
@@ -67,7 +68,7 @@ message="line 1:58 extraneous input hello world expecting ) (...) values (1,1 he
 \end{block}
 
 \subsection{Clefs composites}
-Via Devcenter on insert les lignes demandées comme sur les figures suivantes. \newline
+Via Devcenter on insère les lignes demandées comme sur les figures suivantes. \newline
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.7]{img/add_patrick.png}
@@ -77,12 +78,29 @@ Via Devcenter on insert les lignes demandées comme sur les figures suivantes. \
 Puis on vérifie la table des relations d'abonnement \lq follows\rq.
 La premier relation d'abonnement (georges suit sylvain) à été supprimée.
 En effet, lors de la définition de la famille de clef follows, la colonne
-follower\_id est déclarée comme une clef primaire, elle est donc unique. Autrement dit
-On ne peut suivre qu'une seule personne à la fois.
+follower\_id est déclarée comme une clef primaire, elle est donc unique.\newline
+\begin{tt}
+CREATE TABLE follows(follower\_id bigint \textcolor{red}{PRIMARY KEY}, followed\_id bigint); \newline
+\end{tt}
+Autrement dit, on ne peut suivre qu'une seule personne à la fois.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.6]{img/solo_key.png}
 \caption{Unique relation de la table follows après l'ajout de patrick.}
 \end{figure}
+\par A l'aide de la commande indiquée dans l'énoncé du tp on défini un couple de clef.
+Désormais, c'est la relation suivit-abonné qui est unique. On ne peut suivre quelqu'un 
+qu'une seul fois. On note que seul 3 ligne ont été inséré car les deux dernier INSERT
+sont des duplicats.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.7]{img/all_follows.png}
+\caption{Série d'insertion d'abonnement.}
+\end{figure}
 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{img/follows_result.png}
+\caption{Relevé des différents abonnements.}
+\end{figure}
 
