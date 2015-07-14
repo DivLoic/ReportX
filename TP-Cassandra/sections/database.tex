@@ -1,6 +1,6 @@
 \subsection{Description de l'espace de clef}
 \par Pour mieux comprendre la structure de donnée dans cassandra
-cette partie propose un petit point sur ce qu'est un espace de clef.\newline
+cette partie propose un petit point sur ce qu'est un espace de clef.
 
 \begin{tt}
 \begin{alltt}
@@ -17,9 +17,9 @@ dans les systemes classiques ou dans les systèmes document (mongodb, couchdb). 
 la séparation entre les tables (mysql) ou les collections (mongodb). Chaque ligne insérée présente des informations pour certaines colonnes
 d'un famille de colonnes.
 
-\begin{block}{Propriétées}
+\begin{block}{Propriétées(Keyspace)}
 \begin{itemize}
-\item \textbf{Replication factor}: définit le nombre de noeud possédant un copie de la donnée. 
+\item \textbf{Replication factor}: définit le nombre de noeuds possédant un copie de la donnée. 
 \item \textbf{Replica placement strategy}: il s'agit du mode de répartition des réplicats. Il en 
 existe trois. simple strategy,  old network topology strategy, network topology strategy
 \item \textbf{Column families}: Liste des familles des colonnes associées. Dans notre cas sur le keyspace
@@ -27,7 +27,7 @@ TP il y a user, follows et message.
 \end{itemize}
 \end{block}
 
-\par La commande de création du Keyspace TP signifie donc: créer l'espace de clefs TP dont les lignes ne sont présentes que sur un noeud.
+\par La commande de création du Keyspace dans TP signifie donc: créer l'espace de clefs TP dont les lignes ne sont présentes que sur un noeud.
 Si il doit y avoir de la réplication le \textit{partitioner} rédistrubura automatiquement sur le noeud suivant.\newline La commande DESCRIBE nous permet d'avoir la liste de keyspaces.\newline
 \begin{tt} 
 \indent cqlsh> DESCRIBE KEYSPACES; \newline 
@@ -53,8 +53,8 @@ On peut ensuite retrouver les colonnes d'une famille en particulier. \newline
 
 \subsection{le CQL, langage de requête Cassandra}
 
-
-\par 
+\par Dans cette partie on exécutes les commandes présentes dans le TP pour crée la base de données
+qui sera utilisée par la suite.
 \begin{block}{remarque}
 On note que l\rq utilisation de double quotes (") dans la ligne de commande provoque l'erreur: \newline
 \begin{tt}

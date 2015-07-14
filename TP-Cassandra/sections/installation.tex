@@ -10,7 +10,7 @@ On redirige en suite les logs en éditant le fichier \textit{logback.xml}. \newl
 \textcolor{cyan}{<file>} /home/lmdadm/log/cassandra/system.log \textcolor{cyan}{</file>} \newline
 ... \newline
 \end{tt}
-Puis on édite le fichier \textit{cassandra.yalm}. La liste suivante présente tous la paramètres personnalisés dans le cadre du TP:
+Puis on édite le fichier \textit{cassandra.yalm}. La liste suivante présente tous les paramètres personnalisés dans le cadre du TP:
 \begin{itemize}
 \item \textcolor{cyan}{cluster\_name}\textcolor{magenta}{:} Cassandra Cluster
 \item \textcolor{cyan}{data\_file\_directories}\textcolor{magenta}{:} /home/lmdadm/data/cassandra
@@ -18,7 +18,7 @@ Puis on édite le fichier \textit{cassandra.yalm}. La liste suivante présente t
 \item \textcolor{cyan}{saved\_caches\_directory}\textcolor{magenta}{:} /home/lmdadm/tmp/cassandra/saved\_caches
 \end{itemize}
 On lance ensuite la base de donnée. On note que l'option indiquée dans le TP -f
-signifie: \textit{force foreground}. Conclusion, nous n'utiliserons sur tout pas cette option. Après l'avoir lancé en mode démon, on ouvre la console: \newline
+signifie: \textit{force foreground}. Conclusion, nous n'utiliserons surtout pas cette option. Après l'avoir lancé en mode démon, on ouvre la console: \newline
 \begin{tt}
 lmdadm \$ ./bin/cassandra \newline
 lmdadm \$ ./bin/cqlsh \newline
