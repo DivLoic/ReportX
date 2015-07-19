@@ -21,7 +21,7 @@ d'un famille de colonnes.
 \begin{itemize}
 \item \textbf{Replication factor}: définit le nombre de noeuds possédant un copie de la donnée. 
 \item \textbf{Replica placement strategy}: il s'agit du mode de répartition des réplicats. Il en 
-existe trois. simple strategy,  old network topology strategy, network topology strategy
+existe trois. simple strategy,  old network topology strategy, network topology strategy.
 \item \textbf{Column families}: Liste des familles des colonnes associées. Dans notre cas sur le keyspace
 TP il y a user, follows et message.
 \end{itemize}
@@ -66,7 +66,7 @@ message="line 1:58 extraneous input hello world expecting ) (...) values (1,1 he
 \end{block}
 
 \subsection{Clefs composites}
-Via Devcenter on insère les lignes demandées comme sur les figures suivantes. \newline
+Via Devcenter on insère les lignes demandées comme sur les figures suivantes (figure 4). \newline
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.7]{img/add_patrick.png}
@@ -88,7 +88,7 @@ Autrement dit, on ne peut suivre qu'une seule personne à la fois.
 \end{figure}
 \par A l'aide de la commande indiquée dans l'énoncé du tp on défini un couple de clef.
 Désormais, c'est la relation suivit-abonné qui est unique. On ne peut suivre quelqu'un 
-qu'une seul fois. On note que seul 3 ligne ont été inséré car les deux dernier INSERT
+qu'une seul fois. On note que seul 3 lignes ont été insérées car les deux derniers INSERT
 sont des duplicats.
 \begin{figure}[h!]
 \centering

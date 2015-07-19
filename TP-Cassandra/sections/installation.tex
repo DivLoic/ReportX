@@ -1,5 +1,5 @@
 \par Pour réaliser l'installation du logiciel avec la dernière version en date: \textit{2.1.7},\newline
-on procède d'une manière différente en indiquant toute les étapes.\newline
+on procède d'une manière différente en indiquant toutes les étapes ci-dessous.\newline
 \begin{tt}
 lmdadm \$ wget ftp://mirrors.ircam.fr/.../apache-cassandra-2.1.7-bin.tar.gz \newline
 lmdadm \$ tar -zxvf apache-cassandra-2.1.7-bin.tar.gz \newline
@@ -17,7 +17,7 @@ Puis on édite le fichier \textit{cassandra.yalm}. La liste suivante présente t
 \item \textcolor{cyan}{commitlog\_directory}\textcolor{magenta}{:} /home/lmdadm/log/cassandra/commitlog
 \item \textcolor{cyan}{saved\_caches\_directory}\textcolor{magenta}{:} /home/lmdadm/tmp/cassandra/saved\_caches
 \end{itemize}
-On lance ensuite la base de donnée. On note que l'option indiquée dans le TP -f
+On lance ensuite la base de données. On note que l'option indiquée dans le TP ( -f )
 signifie: \textit{force foreground}. Conclusion, nous n'utiliserons surtout pas cette option. Après l'avoir lancé en mode démon, on ouvre la console: \newline
 \begin{tt}
 lmdadm \$ ./bin/cassandra \newline

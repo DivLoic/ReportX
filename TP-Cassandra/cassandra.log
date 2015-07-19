@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.29)  14 JUL 2015 23:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.3.29)  19 JUL 2015 23:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -777,7 +777,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 20--31
 
  []
 
-(./sections/gui.tex <img/ip.png, id=45, 452.69125pt x 177.66376pt>
+(./sections/gui.tex <img/ip.png, id=49, 452.69125pt x 177.66376pt>
 File: img/ip.png Graphic file (type png)
 
 <use img/ip.png>
@@ -790,7 +790,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<img/select.png, id=60, 530.98375pt x 234.8775pt>
+<img/select.png, id=64, 530.98375pt x 234.8775pt>
 File: img/select.png Graphic file (type png)
  <use img/select.png>
 Package pdftex.def Info: img/select.png used on input line 28.
@@ -812,7 +812,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--47
  []
 
 [2 <./img/ip.png> <./img/select.png>]
-<img/cqlsh.png, id=71, 512.91624pt x 327.2225pt>
+<img/cqlsh.png, id=75, 512.91624pt x 327.2225pt>
 File: img/cqlsh.png Graphic file (type png)
  <use img/cqlsh.png>
 Package pdftex.def Info: img/cqlsh.png used on input line 50.
@@ -829,7 +829,7 @@ Overfull \hbox (54.21938pt too wide) in paragraph at lines 58--66
  hello world[)]...)>
  []
 
-<img/add_patrick.png, id=72, 469.755pt x 56.21pt>
+<img/add_patrick.png, id=76, 469.755pt x 56.21pt>
 File: img/add_patrick.png Graphic file (type png)
  <use img/add_patrick.png>
 Package pdftex.def Info: img/add_patrick.png used on input line 72.
@@ -838,7 +838,7 @@ Package pdftex.def Info: img/add_patrick.png used on input line 72.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<img/solo_key.png, id=73, 647.41875pt x 128.48pt>
+<img/solo_key.png, id=77, 647.41875pt x 128.48pt>
 File: img/solo_key.png Graphic file (type png)
  <use img/solo_key.png>
 Package pdftex.def Info: img/solo_key.png used on input line 86.
@@ -848,14 +848,14 @@ Overfull \hbox (1.78128pt too wide) in paragraph at lines 86--87
  [][] 
  []
 
-[3 <./img/cqlsh.png>] <img/all_follows.png, id=80, 426.59375pt x 65.24374pt>
+[3 <./img/cqlsh.png>] <img/all_follows.png, id=84, 426.59375pt x 65.24374pt>
 File: img/all_follows.png Graphic file (type png)
 
 <use img/all_follows.png>
 Package pdftex.def Info: img/all_follows.png used on input line 95.
 (pdftex.def)             Requested size: 298.61357pt x 45.6703pt.
 
-<img/follows_result.png, id=81, 652.4375pt x 161.60374pt>
+<img/follows_result.png, id=85, 652.4375pt x 161.60374pt>
 File: img/follows_result.png Graphic file (type png)
 
 <use img/follows_result.png>
@@ -866,7 +866,7 @@ Overfull \hbox (4.79256pt too wide) in paragraph at lines 101--102
  [][] 
  []
 
-) (./sections/usecase.tex <img/where_clause.png, id=82, 390.45876pt x 64.24pt>
+) (./sections/usecase.tex <img/where_clause.png, id=86, 390.45876pt x 64.24pt>
 File: img/where_clause.png Graphic file (type png)
 
 <use img/where_clause.png>
@@ -874,7 +874,7 @@ Package pdftex.def Info: img/where_clause.png used on input line 11.
 (pdftex.def)             Requested size: 273.31926pt x 44.96768pt.
  [4 <./img/add_patrick.png> <./img/solo_key.png> <./img/all_follows.png> <./img
 /follows_result.png>]
-<img/george_time_line.png, id=95, 513.92pt x 150.5625pt>
+<img/george_time_line.png, id=99, 513.92pt x 150.5625pt>
 File: img/george_time_line.png Graphic file (type png)
 
 <use img/george_time_line.png>
@@ -885,25 +885,40 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--37
 
  []
 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 46.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 46.
+<img/ipython.png, id=102, 441.65pt x 565.11125pt>
+File: img/ipython.png Graphic file (type png)
+ <use img/ipython.png>
+Package pdftex.def Info: img/ipython.png used on input line 54.
+(pdftex.def)             Requested size: 397.48132pt x 508.59541pt.
+
+Overfull \hbox (10.80836pt too wide) in paragraph at lines 54--55
+[][] 
+ []
+
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 42.
- [5 <./img/where_clause.png> <./img/george_time_line.png>]
+ [5 <./img/where_clause.png> <./img/george_time_line.png>] [6 <./img/ipython.pn
+g>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 42.
  (./cassandra.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 42.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 42.
 Package rerunfilecheck Info: File `cassandra.out' has not changed.
-(rerunfilecheck)             Checksum: 4E0269EA84F70EC55E364480FC0FCFEC;627.
+(rerunfilecheck)             Checksum: 9324413CF71504EFD90B95545D5F89B3;688.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 42.
  ) 
 Here is how much of TeX's memory you used:
- 7740 strings out of 493117
- 113402 string characters out of 6135433
+ 7751 strings out of 493117
+ 113565 string characters out of 6135433
  201993 words of memory out of 5000000
- 11050 multiletter control sequences out of 15000+600000
+ 11057 multiletter control sequences out of 15000+600000
  13397 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,8n,28p,264b,425s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,8n,29p,264b,425s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<
 /usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></u
@@ -914,10 +929,10 @@ al/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local
 /texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/t
 exlive/2014/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/tex
 live/2014/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on cassandra.pdf (5 pages, 434575 bytes).
+Output written on cassandra.pdf (6 pages, 521110 bytes).
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 126 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 156 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 139 words of extra memory for PDF output out of 10000 (max. 10000000)
 
