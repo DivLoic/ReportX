@@ -1,0 +1,59 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lineno}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{alltt}
+\usepackage{upquote}
+\usepackage{listings}
+\input{java.Rnw}
+\title{Rapport Projet Bigdata ISEP 2015}
+\author{Romain - Delphine - Billy - Loïc}
+\date{Novembre 2015}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+\section{Environnement de travail, outils et organisation.}
+\section{Intégration de données}
+\subsection{Description des fichiers}
+\subsection{Script d’intégration}
+\section{Modélisation de la donnée}
+\subsection{Stratégie}
+\subsection{Modélisation}
+\paragraph{Point de départ: les tables Enernoc}
+\paragraph{Difficultés rencontrées liées à la modélisation: La table colonne}
+\paragraph{Les solutions privilégiées}
+\section{Calculs des Load Curves}
+
+\begin{lstlisting}[language=java]
+import org.apache.hadoop.hive.ql.exec.UDAF;
+import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
+
+public class MapCollector extends UDAF{
+  //this a test comment
+  public static class UDAFMapState{
+		private HashMap<String, Float> set;
+		private String keys = "initial string";
+	}
+  /**this is more test comment
+  */
+}
+\end{lstlisting}
+
+
+
+\end{document}

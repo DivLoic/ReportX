@@ -6,5 +6,10 @@
 *.out
 
 *.gz
-
+*.toc
 *.aux
+.Rproj.user
+
+*.Rproj
+
+PandasBG-report/.Rhistory
