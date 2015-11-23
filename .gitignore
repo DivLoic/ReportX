@@ -11,5 +11,6 @@
 .Rproj.user
 
 *.Rproj
-
+*.RData
+*.lof
 PandasBG-report/.Rhistory

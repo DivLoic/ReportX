@@ -1,0 +1,131 @@
+\section{Tableau Software}
+
+\par Pour visualiser toutes les analyses effectuées dans les précédentes questions, nous avons utilisé Tableau Software qui est l’outil de visualisations mais aussi d’analyses par excellence. 
+\par Dans le but d’optimiser les performances de Tableau Software, nous créons dans Hive une table qui agrège les données par jour et qui contient également l’identifiant du site car on ne peut pas avoir accès au metadata à partir de Tableau (en l’occurence d’id du site).
+\par Tableau Software aurait énormément de mal à gérer plusieurs millions de lignes. C’est pour cela que nous avons créé cette table qui compte environ 37000 lignes.
+\par Ensuite, nous nous servons du connecteur natif Hive de Tableau. Comme nous avons aussi besoin du détail de chaque site, nous faisons une jointure sur le champ \sqlcmd{id\_site} comme le montre la figure ci-contre : \newline
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/tablets.png}
+\caption{Sources de données et connection aux tables hive}
+\end{figure}
+\end{center}
+
+\par Enfin nous avons créé un extrait de cette jointure en local pour pouvoir travailler plus rapidement.
+
+\par  Nous pouvons alors mettre en valeur les données collectées, les analyser et prendre des décisions en fonction des constatations. On peut imaginer que ces analyses peuvent permettre de mieux répartir la consommation des différents sites et ainsi réduire les coûts. Vous trouverez ci-dessous des exemples de visualisations :
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/mapts.png}
+\caption{Consommation moyenne annuelle par site}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/barts.png}
+\caption{Consommation moyenne annuelle par industrie et sous industrie}
+\end{figure}
+\end{center}
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/barcolorts.png}
+\caption{Répartition de la consommation moyenne mensuelle par industrie}
+\end{figure}
+\end{center}
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/linets.png}
+\caption{Possibilité de choisir une industrie et faire la différence par rapport à la moyenne de son industrie}
+\end{figure}
+\end{center}
+
+\newpage
+
+\section{Bonus : corrélation entre la température et la consommation électrique}
+La mise en corrélation de la température et la consommation énergétique est composée de plusieurs étapes :
+\begin{itemize}
+\item[-] Recherche de la source de données
+\item[-] Associer chaque site à une station météorologique
+\item[-] Extraire les données températures
+\item[-] Corréler les données de température avec la consommation
+\end{itemize}
+
+\subsection{Recherche de la source de données}
+
+\par Tout d’abord, nous avons recherché les différentes sources de données disponibles en matière de données climatiques, à savoir les APIs (\link{http://openweathermap.org/history}{http://openweathermap.org/history}) ou les serveur FTP.
+\par Avec les APIs, on peut directement envoyer les coordonnées GPS du site ainsi que la date de début et la date de fin et on obtient la température. 
+Nous avons très vite écartés cette car nous avons trouvé que la plupart des services web étaient payants pour les données historiques de températures (environ 150\$ par mois \link{http://openweathermap.org/price}{http://openweathermap.org/price} ).
+
+Nous nous sommes alors tourné vers les données collectées par l’état américain : NOAA (National Centers For Environmental Information). Cet organisme fournit des données de qualité sur différents indicateurs, force du vent, humidité et température moyenne. Il met à disposition des serveurs FTP. Voici plusieurs liens utiles :
+\begin{itemize}
+\item[-]
+\item[-]\link{ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt}{ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt} permet de comprendre les données, les unités, les différentes colonnes, le lien entre les fichiers etc.
+\item[-]\link{ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv}{ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv} liste les stations météorologiques disponibles.
+\item[-]\link{ftp.ncdc.noaa.gov/pub/data/gsod/2012/}{ftp.ncdc.noaa.gov/pub/data/gsod/2012/} contient l’ensemble des données de l’année 2012 pour les différentes stations.
+\end{itemize}
+
+Nous avons téléchargé ces fichiers en local pour avoir un aperçu des données dans le but de connaître la véracité de ces dernières.
+
+\subsection{Associer chaque site à une station météorologique}
+
+Une fois la source de données téléchargée, nous devons associé chaque site à la station météo la plus proche avec un script R. Nous avons codé un script R qui permet d’associer chaque site à une station. Nous nous sommes aperçu que l’on ne retrouvait pas toutes les stations du référentiel dans le détail des fichiers. Il a donc fallu calculer, pour chaque site, la distance avec les stations par ordre croissant jusqu’à trouver une correspondance (entre le référentiel et détail des données). Nous avons rajouté trois colonnes au fichier original  all\_sites.csv : deux colonnes pour identifier la station : \sqlcmd{id\_station} et WBAN ainsi que distance (distance entre la station et le site). Pour information, nous avons trouvé une distance moyenne entre le site et la station de 20 km, avec une distance maximale de 90 km. Nous pensons que 20km n’est pas une distance très importante par rapport à la surface des Etats-Unis et que les températures obtenues sont des bons indicateurs.
+
+\subsection{Extraire les données de températures}
+\par Cette étape consiste à parcourir les sites, rechercher dans les différents fichiers la station correspondante et à extraire uniquement l’information qui nous intéresse, c’est-à-dire la température moyenne par jour. 
+\par A la fin, nous obtenons un fichier d’environ 35000 lignes au lieu de 36000. Nous pouvons donc constater qu’il manque 1500 lignes (365 jours * 100 sites). En effet toutes les stations ne fournissent pas l’année 2012 entière.
+\par Ensuite nous avons crée une table (\sqlcmd{byday\_temperature}) sur Hive avec les données obtenues : date , température, identifiant du site.
+
+\subsection{Corréler les données de température avec la consommation}
+Pour corréler ces données nous avons joint trois tables \sqlcmd{byday}(consommation électrique  totale par jour), \sqlcmd{byday\_temperature} (temperature par jour par site) et \sqlcmd{all\_sites} (détails des sites) comme le montre la figure ci-dessous.
+
+De la même manière que pour le IV, nous avons extrait les données pour une question de performance. Nous pouvons alors montrer la corrélation entre les deux variables (en bleu la consommation et orange la température) sur le graphe ci-dessous : 
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/joints.png}
+\caption{Sources de données}
+\end{figure}
+\end{center}
+
+\par De la même manière que pour le IV, nous avons extrait les données pour une question de performance. Nous pouvons alors montrer la corrélation entre les deux variables (en bleu la consommation et orange la température) sur le graphe ci-dessous : 
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/ldts.png}
+\caption{Comparaison entre température et consomation éléctrique}
+\end{figure}
+\end{center}
+
+Nous pouvons d’ores et déjà affirmer qu’il y a une relation entre température et consommation. On observe que lorsque la température diminue, la consommation augmente. Lorsqu’il fait froid, on a besoin de plus d’énergie pour chauffer les bâtiments. Pour mettre en évidence cette corrélation, nous pouvons représenter la consommation électrique en fonction de la température par industrie (voir ci-dessous).
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/regts.png}
+\caption{Regression Consomation / Température}
+\end{figure}
+\end{center}
+
+Tableau permet de décrire cette corrélation, nous nous intéresserons plus particulièrement à la valeur “R au carré”. Pour obtenir le facteur de corrélation, il suffit de mettre au carré cette valeur, c’est-à-dire : 0.465. On apprend également que le facteur Industry est significatif lorsque la p-value est inférieure à 0.0001.
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/paramts.png}
+\caption{Description du model réalisé par tableau}
+\end{figure}
+\end{center}

@@ -1,0 +1,174 @@
+\section{Stratégie}
+
+\begin{itemize}
+  \item \emph{Data \& Modeling: What data model and representation model should you use in your Hive database? Why?  What issues will you have to deal with if you have to manage the same data  type for 10 million sites?}
+\end{itemize}
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{7} Dans notre cas nous étudions les 100 sur toute l’année. La table construite avec “select * ...” }
+}
+% -- Note en pied de page
+\par Pour mener à bien le projet, notre équipe propose une stratégie en trois étapes. Toutes les mesures seront accumulées dans une table externe all\_records. C’est une table en ligne et les fichiers y sont stockés au format TEXTFILE (cela revient à concaténer tous nos csv). Cette table représente un niveau immuable des données, les lignes n’y sont ni modifiées ni supprimées. On s’appuie sur elles pour effectuer les requêtes de remplissage des tables de travail : work\_table<description>. Cette fois, la table est interne et la donnée y est compressée. Le modèle de données et les requêtes de remplissage dépendent alors de la portée de l’étude\textsuperscript{7} (ceux que nous avons exploités seront décrits dans cette partie). Enfin, le résultat des différentes agrégations est stocké dans des vues HIVE afin d’y simplifier l’accès.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=sql]
+LOAD DATA INPATH '/user/panda/enernoc/' OVERWRITE INTO TABLE tibet.all_records;
+\end{lstlisting}
+\caption{Requête de remplissage de la table all\_records}
+\end{figure}
+
+\section{Modélisation}
+
+\subsection{Point de départ: les tables Enernoc}
+
+\begin{center}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{./image/ER.png}
+\caption{Entité-Relation relative aux tables de départ fournies pas Enernoc}
+\end{figure}
+\end{center}
+
+\begin{block}{Note}
+Lien entre \sqlcmd{all\_site} et \sqlcmd{all\_records}. Dès les premières injections de données et créations de table il semble évidant que le lien entre ces deux tables nécessite une jointure. Celle-ci se réalise sur les champs : \sqlcmd{all\_sites.SITE\_ID} et \sqlcmd{all\_records}. Comme expliqué en III.1 dans la description des fichiers, les mesures portent en nom de fichier l’id du site mais il ne se retrouve pas dans les colonnes. Nous effectuons donc la jointure sur la méta donnée \sqlcmd{INPUT\_\_FILE\_\_NAME} qui retourne l'adresse complète de la ressource.
+(ex: \textcolor{blue}{hdfs://ns3099426....eu:8020/apps/hive/warehouse/project.db/enernoc/474.csv} ) Notre première UDF\textsuperscript{8} consistera alors à parser ce chemin pour obtenir l’id, ici \textbf{474}. Cette infomation est accessible pour chaque ligne de la table.
+\end{block}
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=java]
+public Text evaluate(Text input){
+  	if (input == null) return new Text("");
+		final String path = input.toString();
+		final int index = path.lastIndexOf("/");
+		final int offset = path.lastIndexOf(".");
+		return new Text(path.substring(index + 1, offset));
+}
+\end{lstlisting}
+\caption{Implémentation de l'UDF: filename}
+\end{figure}
+
+Une fois l'UDF crée et le projet compilé le fichier \textit{.jar} est insérer dans Hue en temps que Jar temporaire  Hive.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT all_sites.site_id, all_sites.industry, 
+all_records.dttm_utc, all_records.value
+FROM all_sites JOIN all_records 
+ON filename(all_records.INPUT__FILE__NAME) == all_sites.site_id;
+\end{lstlisting}
+\caption{Exemple d'utilisation de l'UDF filename}
+\end{figure}
+
+On peut observer à la ligne 4 l'utilisation de la fonction filename. A l'avenir pour ne plus avoir à répéter cette jointure on contruira une vue s'appuyant sur cette reqête.
+
+\subsection{Difficultés rencontrées liées à la modélisation: La table colonne}
+\par En partant de la définition même de la LD (dont le calcul est le principal objectif du projet), on comprend que de nombreuses agrégations vont devoir être exécutées. Nous envisageons donc dans un premier temps de ranger les données en colonne avec une table proche de ce format.
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+&site1&site2&site3&site4&site5&site100\\ \hline
+timestamp5&&&&&&\\ \hline
+timestamp10&&&&&&\\ \hline
+etc&&&&&&\\ \hline
+\end{tabular}
+\caption{Première approche du sujet. Ce format de table à été abandonné}
+\end{figure}
+
+\par Quels sont les inconvénients et pourquoi nous ne l’avons pas mise en place ?
+Dans un premier temps, il devient difficile de faire des agrégations sur les dates, il faut sommer les différentes colonnes entre elles. Les colonnes étant variables, il devient très difficile d’imaginer la gestion d’un plus grand nombre de sites comme les 10 millions proposés dans le sujet. De plus, cette représentation semble impliquer une forte perte d’information. \newline
+
+\par Finalement, les difficultés liées à l’augmentation du nombre de sites sont les suivantes : 
+\begin{itemize}
+\item[-] Temps de calcul des loadcurves
+\item[-] Scalabilité des programmes (l’augmentation du temps de calcul suit l’augmentation du nombre de données)
+\item[-] Profondeur des jointures (plus le nombre de sites augmente plus la jointure évoquée en III.2 ralentit la remontée des résultats)
+\item[-] Agrégations de plus en plus coûteuses (avec une durée d’étude qui s’élargit aussi dans le temps, il sera de plus en plus difficile de calculer la LD)
+\end{itemize}
+
+\subsection{Les solutions privilégiées}
+
+\par Après plusieurs essais pour obtenir les résultats demandés (LD) dans la suite du projet, notre équipe s’est tournée vers différentes solutions de dénormalisation. Elle reposent principalement sur les types introduits par Hive comme Array<T1> ou Map<T1, T2>\textsuperscript{9}. Une table de travail peut répondre à plusieurs requêtes. 
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{8} Les UDFs sont réunies dans un \link{https://github.com/DivLoic/Bamboo}{projet java} dans lequel toute l’équipe a contribué. }
+}
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{9} Ou T1 \& T2 sont des types de base, comme ceux vu en cours : STRING, FLOAT BIGINT etc.}
+}
+% -- Note en pied de page
+\begin{block}{Note}
+les requêtes que nous avons regroupées ensemble ne sont pas forcément ordonnées. Ainsi, la première table nous permet de traiter les LD 1 et 3, puis on traite ensemble 2 et 4, enfin 5, 6 et 7 avec la troisième table de travail. Les LD seront donc abordées dans cet ordre dans le reste du rapport et lors de la soutenance.
+\end{block}
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\sqlcmd{datetime} [STRING]&\sqlcmd{Values} [Array<FLOAT>]\\ \hline
+“2012-01-20 00\hc05\hc00”&[ , , , , , , , , , , , , , , , , , ,]\\ \hline
+“2012-01-20 00\hc10\hc00”&[ , , , , , , , , , , , , , , , , , ,]\\ \hline
+\end{tabular}
+\caption{Modélisation de la table : work\_table\_site\_axis}
+\end{figure}
+
+\par Cette table est utilisée pour le calcul des LD 1 et 3. On y retrouve toutes les dates de mesure une seule fois et pour chaque date de mesure correspond un tableau de valeurs qui regroupe les mesures de tous les sites observés. On a donc 305409 lignes, et sur chacune un tableau de 100 éléments. Cette table est particulièrement efficace pour l'agrégation SUM qui est demandée.
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\sqlcmd{datetime} [STRING]&\sqlcmd{industry} [STRING]&\sqlcmd{values} [Array<FLOAT>]\\ \hline
+“2012-03-15 07\hc20\hc00”&Commercial Property&[ , , , , , , , , , , , , , , , , ,]\\ \cline{2-3} 
+&Light Industrial&[ , , , , , , , , , , , , , , , , ,]\\ \cline{2-3} 
+&Education&[ , , , , , , , , , , , , , , , , ,]\\ \cline{2-3} 
+&Food Sales \&Storage&[ , , , , , , , , , , , , , , , , ,]\\ \hline
+“2012-03-15 07\hc25\hc00”&Commercial Property&[ , , , , , , , , , , , , , , , , ,]\\ \cline{2-3}
+&... etc &[ , , , , , , , , , , , , , , , , ,]\\ \hline
+\end{tabular}
+\caption{Modélisation de la table : work\_table\_industry\_axis}
+\end{figure}
+
+\par Cette table est similaire à la précédente mais présente un découpage supplémentaire avec une colonne \sqlcmd{industry}. Elle est d'ailleurs partitionnée par industrie. On a donc plus de lignes (4*305409) et seulement des tableaux de 25 valeurs par lignes. La table permet alors de réaliser les moyennes par industrie demandée dans les questions 2 et 4.
+
+\begin{block}{Note}
+Nous nous sommes demandés s’il était préférable de n’utiliser que cette dernière table puisqu’elle peut répondre aux deux types de questions (1 à 4) moyennant quelques agrégations supplémentaires. Mais le gain de temps qui va avec la première table n’est pas négligeable.
+\end{block}
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\hline
+date&season&value&id&industry&sub\_indus&sq\_ft&lat&lng \\ \hline
+&&&&&&&&\\ \hline
+
+\end{tabular}
+\end{figure}
+
+\par Cette table est utilisée pour le reste des LD. Ici, on répète énormément d’informations, le but est de supprimer les jointures nécessaires pour répondre aux questions, et obtenir les résultats plus vite. L'exemple suivant présente le temps d'exécution de la requête pour la première LD avec et sans remise enforme des tables.
+
+\newpage 
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+-- Requete d'origine -> 16:41 min --
+SELECT dttm_utc, SUM(value) FROM all_records GROUP BY all_records.dttm_utc ORDER BY dttm_utc;
+-- Requete sur la tables de travail -> 2:08 min --
+SELECT datetime AS datetime, arraysum(values) AS total
+FROM work_table_site_axis 
+ORDER BY datetime;
+\end{lstlisting}
+\caption{Comparaison du temps d'execution des requêtes sur les tables de travail.}
+\end{figure}
+
+\par \textbf{Conclusion sur la modélisation}:\newline
+Pour mener à bien les analyses demandées nous accepterons donc une perte d’information sur certaines tables mais aussi la duplication de certaines informations. De sorte que les requêtes s’exécutent le plus vite possible. La dénormalisation nous permet de rehausser certaines agrégations de manière à ne plus avoir à les refaire. On remarque aussi que la compression au format ORC accélère également les requêtes. Le contre coût est le temps de remplissage des tables (voir partie IV). Mais une fois mise en place, elle permet un gain de temps. Ce temps doit toujours être limité si l’on veut placer des applications (de production) en bout de système. Quitte à laisser les tables se remplir lors de batch nocturnes.   
+

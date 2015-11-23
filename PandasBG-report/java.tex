@@ -1,18 +1,63 @@
 \usepackage[usenames, dvipsnames]{color}
-\definecolor{pblue}{rgb}{0.13,0.13,1}
-\definecolor{pgreen}{rgb}{0,0.5,0}
-\definecolor{pred}{rgb}{0.9,0,0}
-\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
-\lstset{language=Java,
-  showspaces=false,
-  showtabs=false,
-  breaklines=true,
-  showstringspaces=false,
-  breakatwhitespace=true,
-  commentstyle=\color{pgreen},
-  keywordstyle=\color{pblue},
-  stringstyle=\color{pred},
-  basicstyle=\footnotesize\ttfamily,
-  moredelim=[il][\textcolor{pgrey}]{$$},
-  moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+\lstdefinelanguage{JAVA}{
+  keywords={abstract,continue,for,new,switch,assert***,default,goto*,package,synchronized,boolean,do,if,private,this,break,double,implements,protected,throw,byte,else,import,public,throws,case,enum****,instanceof,return,transient,catch,extends,int,short,try,char,final,interface,static,void,class,finally,long,strictfp**,volatile,const*,float,native,super,while},
+  keywordstyle=\color{cyan}\bfseries,
+  ndkeywords={class, return, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{Blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{Plum}\ttfamily,
+  stringstyle=\color{OliveGreen}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  numbers=left
+}
+
+\lstset{
+   language=JAVA,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
+
+
+\lstdefinelanguage{SQl}{
+  keywords={typeof, new, true, false, catch, function,  null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{cyan}\bfseries,
+  ndkeywords={class, return, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{Blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{Plum}\ttfamily,
+  stringstyle=\color{OliveGreen}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  numbers=left
+}
+
+\lstset{
+   language=SQl,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
 }

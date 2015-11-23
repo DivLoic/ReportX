@@ -1,21 +1,24 @@
 \documentclass{report}
 \usepackage[utf8]{inputenc}
-\usepackage[top=2cm, bottom=2cm, left=4cm, right=4cm]{geometry}
+\usepackage[top=1.5cm, bottom=2cm, left=3.5cm, right=3.5cm]{geometry}
 \usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{lineno}
 \usepackage{natbib}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{wrapfig}
 \usepackage{tabularx}
 \usepackage{alltt}
+\usepackage{titlesec}
 \usepackage{upquote}
 \usepackage{listings}
-\input{java.Rnw}
+
+\input{lang.Rnw}
 \title{Rapport Projet Bigdata ISEP 2015}
-\author{Romain - Delphine - Billy - Loïc}
+\author{CHANTHAVONG Delphine \\ RASOLOMALALA Narisely \\ PHILIPPE Romain \\ DIVAD Loïc}
 \date{Novembre 2015}
 \usepackage{Sweave}
 \begin{document}
@@ -25,35 +28,73 @@
 
 \tableofcontents
 
+\listoffigures
+
+\titleformat
+{\chapter}[display] %command% shape
+{\bfseries\huge} % format
+{} % label
+{-6ex} % sep
+{
+    \thechapter. 
+    %\rule{\textwidth}{1pt}
+    %\vspace{1ex}
+    %\centering
+} % before-code
+[
+\vspace{0ex}%
+%\rule{\textwidth}{0.3pt}
+] % after-code
+
+
+%\newenvironment{link}[2]{\textcolor{blue}{\underline{\textit{\href{#1}{#2}}}}}{}
+\newenvironment{unix}[1]{\par\begin{center}\begin{tt}\$ \emph{#1} \end{tt}\end{center}}{\par}
+\newenvironment{block}[1]{\par\vspace{5pt}\underline{\emph{#1}:}} {\par\vspace{5pt}}
+\newenvironment{key}[1]{\par\vspace{5pt}\underline{\emph{#1}:}} {\par\vspace{5pt}}
+
+\edef\hc{\string:}
+\newcommand{\link}[2]{\textcolor{blue}{\underline{\textit{\href{#1}{#2}}}}}
+\newcommand{\sqlcmd}[1]{\begin{tt}\textcolor{NavyBlue}{#1}\end{tt}}
+\newcommand{\jb}[1]{\begin{tt}\textcolor{Red}{#1}\end{tt}}
+
+%Mulberry
 \newpage
 
-\section{Introduction}
-\section{Environnement de travail, outils et organisation.}
-\section{Intégration de données}
-\subsection{Description des fichiers}
-\subsection{Script d’intégration}
-\section{Modélisation de la donnée}
-\subsection{Stratégie}
-\subsection{Modélisation}
-\paragraph{Point de départ: les tables Enernoc}
-\paragraph{Difficultés rencontrées liées à la modélisation: La table colonne}
-\paragraph{Les solutions privilégiées}
-\section{Calculs des Load Curves}
 
-\begin{lstlisting}[language=java]
-import org.apache.hadoop.hive.ql.exec.UDAF;
-import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
+\chapter{Introduction}
 
-public class MapCollector extends UDAF{
-  //this a test comment
-  public static class UDAFMapState{
-		private HashMap<String, Float> set;
-		private String keys = "initial string";
-	}
-  /**this is more test comment
-  */
-}
-\end{lstlisting}
+\chapter{Environnement de travail, outils et organisation.}
+
+\input{./sections/tools.Rnw}
+
+\chapter{Intégration de données}
+
+\input{./sections/import.Rnw}
+
+\chapter{Modélisation des données}
+
+\input{./sections/model.Rnw}
+
+\chapter{Calculs des Load Curves}
+
+\input{./sections/ldone.Rnw}
+\input{./sections/ldtwo.Rnw}
+\input{./sections/ldthree.Rnw}
+
+\chapter{Data visualisation}
+
+\input{./sections/tableausoftware.Rnw}
+
+\chapter{Conclusion}
+
+\appendix
+
+\chapter{Team work \& code sources du projets}
+\section{Workflow de l'équipe Panda}
+\section{Exploration et plot sous python}
+\section{Recherche des températures avec R}
+\chapter{Matériel}
+\chapter{Ressources}
 
 
 

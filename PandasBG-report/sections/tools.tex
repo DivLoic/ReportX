@@ -1,0 +1,43 @@
+\par
+Pour pouvoir collaborer plus facilement, nous avons déployé un “cluster” Hadoop que nous installons et administrons nous-même. Cela nous a permis d’éviter des problèmes de ressources liés à l’utilisation des nombreux logiciels.
+\par
+Le cluster est composé de 3 serveurs \textbf{PSV1, PSV2, PSV3} (ces abréviations sont utilisées dans la suite de la description de l'environnement) sur lesquels nous avons installé la distribution Hortonworks de Hadoop (HDP 2.2) et nous permet de travailler ensemble à distance.
+\par
+Dans un premier temps, il nous faut connecter les serveurs entre eux. Pour cela, on génère avec le premier serveur (\textbf{PSV1}) une clé SSH qui sera copiée sur les deux autres serveurs (dans le fichier knowhost du user root).
+\par
+Ensuite, on débute l’installation de l’écosystème. On commence donc par l’installation d’Ambari-serveur que l’on a placée sur \textbf{PSV1}.
+\par
+Par la suite, lorsqu’Ambari serveur est lancé, il nous est demandé de fournir les adresses IP des deux autres serveurs du cluster. Ambari installe alors Ambari-agent sur chaque serveur qui lui se chargera d’installer tous les logiciels Hadoop (il nous propose une répartition des logiciels que l’on a ensuite adaptée à nos ressources)   
+
+\par
+\begin{block}{Note sur les agents Ambari} Il consiste en une série de scripts python dédiée à de nombreuses tâches comme l’installation des paquets, la mise en place et l'autorisation des répertoires ou encore le redémarrage des services Hadoop. 
+\end{block}
+Notre cluster est finalement installé. Nous présenterons donc une répartition des différents logiciels. Chaque machine possède 4GO RAM et possède un Datanode sur un file system de 1 TO. \newline
+
+\begin{figure}[h!]
+\centering
+    
+\begin{tabular}{|c|c|c|c|}
+\hline
+Note&SV1&SV2&SV3\\ \hline
+&Ambari serveur&&\\ \hline
+&&namenode&sec namenode\\ \hline
+&&Yarn&Yarn\\ \hline
+&&&Oozie\\ \hline
+&&&Hbase\\ \hline
+&&&Hive\\ \hline
+&Zookeeper&Zookeeper&Zookeeper\\ \hline
+Éteint&&Storm&\\ \hline
+Éteint&&Kafka&\\ \hline
+&Hue&&\\ \hline
+&Livy&&\\ \hline
+(client)&Tez&Tez&Tez\\ \hline
+(client)&Pig&Pig&Pig\\ \hline
+(client)&Sqoop&Sqoop&Sqoop\\ \hline
+\end{tabular}
+
+\caption{Répartition des logiciels}
+\end{figure}
+
+
+

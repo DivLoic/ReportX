@@ -1,0 +1,157 @@
+\section{Description des fichiers}
+
+\begin{itemize}
+  \item \emph{Data integration: Explain how the data has been recovered from the EnerNOC website and  how it has been integrated into HDFS and a Hive database.}
+\end{itemize}
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{1} Lien de téléchargement du jeu de données : 
+  \link{https://open-enernoc-data.s3.amazonaws.com/anon/index.html}{Les archives}
+  }
+}
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{2} EnerNoc: www.enernoc.com
+  }
+}
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{3} La correspondance entre les sites et les identifiants des fichiers est établie dans le fichier de méta data qui sera vu plus bas.
+  }
+}
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{4} Nombre de secondes écoulées depuis 1er janvier 1970 00:00:00 UTC
+  }
+}
+% -- Note en pied de page
+
+\par Le dataset est hébergé sur une plateforme amazon\textsuperscript{1}. Il s'agit d'un open data, ces informations sont accessibles et utilisables par tous. Elles sont mises à disposition par EnerNoc\textsuperscript{2}, un éditeur de logiciels orienté dans la consommation d'énergie. 
+\par Divers formats sont proposés par l'entreprise, mais nous avons uniquement téléchargé les sources de données au format CSV.  L'archive contenant les fichiers est alors téléchargée sur une des machines disposant d'un client Hadoop. 
+
+\begin{unix}{wget https://open-enernoc-data.s3.amazonaws.com/anon/csv-only.tar.gz}\end{unix}
+
+Puis décompressée:
+
+\begin{unix}{tar -zxvf all-data.tar.gz}\end{unix}
+
+\par On obtient alors un sous dossier de données sources et un sous dossier de "meta data"  servant à expliquer les fichiers. On rédige ici une description des fichiers.
+
+\par Tous les fichiers portent l'extension CSV et ont pour unique titre un identifiant\textsuperscript{3}. Il y en a 100. Tous les csv ont un poids proche de 4.5 Mo ($\pm$ 0.2 Mo) pour 105409 lignes chacun. Le dossier total pèse 460 Mo. Ils présentent tous une première ligne d'en-tête et 105408 autres lignes correspondant chacune à une mesure pour un site à un instant donné. Les mesures sont prises toutes les 5min pendant un an. Ce qui signifie qu'il y a 5min entre chaque ligne du csv. Les colonnes sont les suivantes : timestamp, dttm\_utc, value, estimated, anomaly.
+
+\begin{figure}[h!]
+\centering
+
+\begin{tabular}{|l|l|}
+\hline
+timestamp&Date de la mesure au format POSIX\textsuperscript{4} \\ \hline
+dttm\_utc&Conversion de la date au format UTC (yyyy-MM-dd HH:mm:ss)\\ \hline
+value&Consommation en kWh\\ \hline
+estimated&Boolean pour savoir si la valeur est estimée\\ \hline
+anomaly&Indicateur pour savoir si la valeur est erronée\\ \hline
+\end{tabular}
+
+\caption{Description des fichier xxx.csv}
+\end{figure}
+
+Ces fichiers sont à croiser avec le fichier de meta data. Il présente une ligne par site étudié. \newpage
+
+\begin{figure}[h!]
+\centering
+
+\begin{tabular}{|l|l|}
+\hline
+SITE\_ID&Identifiant du site. C’est le nom du fichier contenant ces mesures.\\ \hline
+INDUSTRY&Secteur du site\\ \hline
+SUB\_INDUSTRY&Sous catégorie du secteur du site\\ \hline
+SQ\_FT&Surface du site en pied carré\\ \hline
+LAT&Latitude du site\\ \hline
+LNG&Longitude du site\\ \hline
+TIME\_ZONE&Nom du fuseau horaire du site\\ \hline
+TZ\_OFFSET&Heure de décalage par rapport au méridien de Greenwich\\ \hline
+
+\end{tabular}
+
+\caption{Description du fichier all\_sites.csv}
+\end{figure}
+
+\begin{block}{Note} Dans une démarche pragmatique, avant l'insertion des données dans HDFS nous avons visualisé quelques CSV au hasard à l’aide d’outils mieux maîtrisés. Nous utilisons donc le langage python pour tirer quelques conclusions qui nous permettrons de mieux appréhender les questions. On indique dans la remarque suivante les points qui ont attiré notre attention. \end{block}
+
+\textbf{Remarques :}
+\begin{itemize}
+\item[-] Il n’y a que 4 industries prises en compte
+\item[-] Les industries sont bien équilibrées en nombre de sites (25sites / industrie)
+\item[-] 5 fuseaux horaires différents sont répertoriés
+\item[-] On trace brièvement les 2000 premiers points (7j) du site 100 (Education)
+\end{itemize}
+
+\par De toutes ces remarques découlent les intuitions suivantes. Il peut être intéressant de créer une table partitionnée par industrie. Les Load Curves peuvent varier plus ou moins entre 25 et 5 kWh en une demie journée.
+
+\par Nous insérons maintenant le dataset dans le filesystem d’hadoop. Pour une meilleure exploitation des fichiers nous retirons les entêtes pour chaque fichier avant l’insertion. Une fois placé dans le dossier contenant les mesures, on applique la commande suivante :
+\begin{unix}{ls | xargs -n 1 sed -i 1d}\end{unix}
+Remarque : Même si les fichiers contenant les mesures ont un encodage correct et un délimiteur de champ/ligne
+adapté, le fichier de meta données lui est problématique. En effet, les lignes sont séparées par le caractère \^{}M.
+Hue propose différents délimiteurs pour les champs mais pas pour les lignes. Le problème est résolu avec la
+commande suivante :
+\begin{unix}{sed -i -e "s/$\backslash$r/$\backslash$n/g"}\end{unix}
+
+Les fichiers sont alors finalement tous prêts à être insérés dans le filesystème hadoop. La partie suivante explique comment nous les avons transférés après le nettoyage. \newpage
+
+\section{Script d’intégration}
+
+% -- Note en pied de page
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{5} Pour le projet nous nous appuyons sur la documentation :
+  \link{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html}{Commandes hdfs}
+}
+
+%    %
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{6} Retrouvez la totalité du script dans note \link{https://github.com/DivLoic/Bamboo/blob/master/push.sh}{répository}
+  }
+}
+%    %
+% -- Note en pied de page
+\par Pourquoi un script d’intégration ? Dans un premier temps, l’interface hue ne propose pas l’intégration d’un dossier entier. Il peut donc vite être fastidieux de sélectionner les 100 fichiers. Les fichiers ne sont pas sur nos postes personnels mais sont déjà présents sur le serveur. Et enfin, l’opération sera a priori répétée un grand nombre de fois, il peut être intéressant de l'en-capsuler avec quelques fonctionnalités utiles.
+
+\par La commande principale est la suivante :
+
+\begin{unix}{hdfs dfs -put <fichier/dossier>}\end{unix}
+
+Description de la commande : 
+\begin{itemize}
+\item[-] hdfs fait appel au client hadoop
+\item[-] dfs indique qu’il s’agit d’une commande du filesystem (à différencier des commandes de lancement de logiciels, de formatage ou encore de configuration)
+\item[-] -put\textsuperscript{5} la commande à exécuter \newline
+\end{itemize}
+
+\par Nous plaçons donc cette commande dans un script simple qui prendra en compte les choses suivantes :
+\begin{itemize}
+\item[-] L’utilisateur du script est bien le user commun 
+\item[-] La cible du script est bien un dossier
+\item[-] Compter le nombre de fichiers et demande une confirmation
+\item[-] Retour d’un code erreur
+\end{itemize}
+
+\par Le script est alors exporté sous le nom “push” par l’utilisateur commun (panda) et s’utilise de la façon suivante :
+
+\begin{unix}{push -t <dossier>}\end{unix}
+
+Finalement, dans un système d’information dans lequel un jeu de données (comme celui proposé par Enernoc) arriverait au fur et à mesure, il peut être intéressant d’automatiser l’importation dans le file system hadoop avec ce genre de script.\newline
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=bash]
+Script start with "panda" privileges.
+100 file(s) from csv will be put in the HDFS
+Please, confirm this operation (y/n) y
+Start acces to the hadoop-client.
+Script terminate with code: 0
+\end{lstlisting}
+\caption{Prompt du script d'intégration des fichiers}
+\end{figure}
+
+
+\par La création du script était une démarche pertinante si on considére un vrai Système d'information. Dans ce cas les fichiers porraient arriver de manière périodique. L'import des data dans le file système peut alors être automatisé et retourner des codes erreurs.  

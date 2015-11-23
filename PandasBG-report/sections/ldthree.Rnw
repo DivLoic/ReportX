@@ -1,0 +1,91 @@
+\section{Recherche de maximum par jour}
+
+\par Les tables précédentes ne peuvent pas répondre à ces trois dernières requêtes. On en crée donc une troisième qui correspondra à un autre type d’étude. Dans cette partie, on observe les mesures par jour, contrairement aux tables précédentes où les lignes correspondaient à des mesures prises toutes les 5 minutes. Elle contient donc 366 lignes et ce remplie en prêt de \jb{16\hc38min}
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+date&season&value&site\_id&sub\_industry&sq\_ft&lat&lng&industry&industry\\ \hline
+&&&&&&&&&\\ \hline
+\end{tabular}
+\caption{Format de la table work\_table\_day\_axis}
+\end{figure}
+
+\par La requête de remplissage est un peut plus complexe.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+FROM all_sites JOIN ( SELECT
+  to_date(dttm_utc) AS date,
+  SUM(value) AS value, filename(INPUT__FILE__NAME) AS site_id FROM all_records
+  GROUP BY filename(INPUT__FILE__NAME), to_date(dttm_utc) ORDER BY date
+) AS tab ON tab.site_id  = all_sites.site_id
+INSERT OVERWRITE TABLE work_table_day_axis PARTITION (industry)
+SELECT tab.date AS date, season(tab.date) AS season,
+tab.value AS value, tab.site_id AS site_id,
+all_sites.sub_industry AS sub_industry, 
+all_sites.sq_ft AS sq_ft, 
+all_sites.lat AS lat, 
+all_sites.lng AS lng,
+all_sites.industry AS industry
+ORDER BY date, site_id;
+\end{lstlisting}
+\caption{Requête de remplissage de la table work\_table\_day\_axis}
+\end{figure}
+
+Une fois remplie on réalise la requête pour obtenir le ratio entre la consomation par jour et la surface de chaque site. La somme pour chaque sites retourne donc 4 ligne en \jb{3:32min}.
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT industry, SUM(value/sq_ft) AS ratio FROM work_table_day_axis 
+GROUP BY industry ORDER BY ratio;
+\end{lstlisting}
+\caption{Requête de calcul de la LD5}
+\end{figure}
+
+La requête suivante est juste un variante. On y modifie uniquement la clause \sqlcmd{GROUP BY}. Ce nouveau découpage renvoie donc 16 lignes en un temps sensiblement identique \jb{3:48min}. 
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT industry, SUM(value/sq_ft) AS ratio FROM work_table_day_axis 
+GROUP BY industry ORDER BY ratio;
+\end{lstlisting}
+\caption{Requête de calcul de la LD5BIS}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+industry&season&energy intensity\\ \hline
+Education&WINTER&49.4558152795\\ \hline
+Education&AUTUMN&50.2533932526\\ \hline
+Education&SPRING&52.8670349976\\ \hline
+Education&SUMMER&59.7216345381\\ \hline
+Commercial Property&AUTUMN&109.140407874\\ \hline
+Commercial Property&WINTER&115.552683121\\ \hline
+Commercial Property&SPRING&121.860600182\\ \hline
+Commercial Property&SUMMER&134.317169258\\ \hline
+Food Sales \& Storage&WINTER&278.465446131\\ \hline
+Food Sales \& Storage&AUTUMN&292.341505588\\ \hline
+Food Sales \& Storage&SPRING&312.841578989\\ \hline
+Food Sales \& Storage&SUMMER&358.074345503\\ \hline
+Light Industrial&WINTER&2051.96315678\\ \hline
+Light Industrial&SPRING&2102.53981548\\ \hline
+Light Industrial&AUTUMN&2315.32341343\\ \hline
+Light Industrial&SUMMER&2441.62428432\\ \hline
+\end{tabular}
+\caption{Power consuption par indutry et par saison}
+\end{figure}
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/power.png}
+\caption{Pie chart du ration consomation/suface par industry}
+\end{figure}
+\end{center}

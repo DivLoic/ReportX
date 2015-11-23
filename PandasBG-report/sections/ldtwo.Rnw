@@ -1,0 +1,3 @@
+\section{Moyenne par industrie}
+
+\newpage 

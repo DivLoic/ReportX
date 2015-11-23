@@ -1,0 +1,85 @@
+\usepackage[usenames, dvipsnames]{color}
+\lstdefinelanguage{JAVA}{
+  keywords={abstract,continue,for,new,switch,assert***,default,goto*,package,synchronized,boolean,do,if,private,this,break,double,implements,protected,throw,byte,else,import,public,throws,case,enum****,instanceof,transient,catch,int,short,try,char,final,interface,static,finally,long,strictfp**,volatile,const*,float,native,super,while},
+  keywordstyle=\color{Mulberry}\bfseries,
+  ndkeywords={class, return, boolean, void, throw, implements, extends, this},
+  ndkeywordstyle=\color{RedOrange}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{OliveGreen}\ttfamily,
+  stringstyle=\color{blue}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  numbers=left
+}
+
+\lstset{
+   language=JAVA,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
+
+
+\lstdefinelanguage{SQl}{
+  keywords={ADD,ADMIN,AFTER,ALL,ALTER,ANALYZE,AND,ARCHIVE,ARRAY,AS,ASC,AUTHORIZATION,BEFORE,BETWEEN,
+BIGINT,BINARY,BOOLEAN,BOTH,BUCKET,BUCKETS,BY,CASCADE,CASE,CAST,CHANGE,CHAR,CLUSTER,
+CLUSTERED,CLUSTERSTATUS,COLLECTION,COLUMN,COLUMNS,COMMENT,COMPACT,COMPACTIONS,COMPUTE,
+CONCATENATE,CONF,CONTINUE,CREATE,CROSS,CUBE,CURRENT,CURRENT_DATE,CURRENT_TIMESTAMP,CURSOR,
+DATA,DATABASE,DATABASES,DATE,DAY,DBPROPERTIES,DECIMAL,DEFERRED,DEFINED,DELETE,
+DELIMITED,DEPENDENCY,DESC,DESCRIBE,DIRECTORIES,DIRECTORY,DISABLE,DISTINCT,DISTRIBUTE,
+DOUBLE,DROP,ELEM_TYPE,ELSE,ENABLE,END,ESCAPED,EXCHANGE,EXCLUSIVE,EXISTS,EXPLAIN,EXPORT,
+EXTENDED,EXTERNAL,FALSE,FETCH,FIELDS,FILE,FILEFORMAT,FIRST,FOLLOWING,FOR,FORMAT,
+FORMATTED,FROM,FULL,FUNCTION,FUNCTIONS,GRANT,GROUP,GROUPING,HAVING,HOLD_DDLTIME,HOUR,
+IDXPROPERTIES,IF,IGNORE,IMPORT,IN,INDEX,INDEXES,INNER,INPATH,INPUTDRIVER,INPUTFORMAT,
+INSERT,INT,INTERSECT,INTERVAL,INTO,IS,ITEMS,JAR,JOIN,KEYS,KEY_TYPE,LATERAL,LEFT,LESS,
+LIKE,LIMIT,LINES,LOAD,LOCAL,LOCATION,LOCK,LOCKS,LOGICAL,LONG,MACRO,MAP,MAPJOIN,
+MATERIALIZED,MINUS,MINUTE,MONTH,MORE,MSCK,NONE,NOSCAN,NOT,NO_DROP,NULL,OF,OFFLINE,ON,
+OPTION,OR,ORDER,OUT,OUTER,OUTPUTDRIVER,OUTPUTFORMAT,OVER,OVERWRITE,OWNER,PARTIALSCAN,
+PARTITION,PARTITIONED,PARTITIONS,PERCENT,PLUS,PRECEDING,PRESERVE,PRETTY,PRINCIPALS,
+PROCEDURE,PROTECTION,PURGE,RANGE,READ,READONLY,READS,REBUILD,RECORDREADER,RECORDWRITER,
+REDUCE,REGEXP,RELOAD,RENAME,REPAIR,REPLACE,RESTRICT,REVOKE,REWRITE,RIGHT,RLIKE,ROLE,ROLES,
+ROLLUP,ROW,ROWS,SCHEMA,SCHEMAS,SECOND,SELECT,SEMI,SERDE,SERDEPROPERTIES,SERVER,SET,SETS,
+SHARED,SHOW,SHOW_DATABASE,SKEWED,SMALLINT,SORT,SORTED,SSL,STATISTICS,STORED,STREAMTABLE,
+STRUCT,TABLE,TABLES,TABLESAMPLE,TBLPROPERTIES,TEMPORARY,TERMINATED,THEN,TIMESTAMP,
+TINYINT,TO,TOUCH,TRANSACTIONS,TRANSFORM,TRIGGER,TRUE,TRUNCATE,UNARCHIVE,UNBOUNDED,UNDO,
+UNION,UNIONTYPE,UNIQUEJOIN,UNLOCK,UNSET,UNSIGNED,UPDATE,URI,USE,USER,USING,UTC,
+UTCTIMESTAMP,VALUE_TYPE,VARCHAR,VIEW,WHEN,WHERE,WHILE,WINDOW,WITH,YEAR},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={all_sites, all_records, panda, tibet, STRING,FLOAT},
+  ndkeywordstyle=\color{NavyBlue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{--},
+  morecomment=[s]{--}{--},
+  commentstyle=\color{Plum}\ttfamily,
+  stringstyle=\color{OliveGreen}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  numbers=left
+}
+
+\lstset{
+   language=SQl,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}

@@ -1,0 +1,179 @@
+\par Comme indiqué dans la partie III. 3, nous regroupons ici le calcul des LD qui se ressemblent. Le découpage se fera donc en trois groupes :
+\begin{itemize}
+\item[-] Somme pour l’ensemble des sites
+\item[-] Moyenne par industrie
+\item[-] Recherche de maximum par jour
+\end{itemize}
+
+\section{Somme pour l’ensemble des sites}
+\begin{itemize}
+\item[-] Calculate the sum LD for the 100 sites (timestamp interval: 5 minutes)
+\item[-] Calculate the total LD for the 100 sites (timestamp interval: a week)
+\end{itemize}
+
+\par Hive propose plusieurs types complexes, dont Array<T>. C’est une structure de données indexées qui peut contenir plusieurs éléments de type T. On s’en servira comme les types : INT, FLOAT ou encore STRING en l'assignant à une colonnes values. Le code suivant est la requête Hive pour créer la table \sqlcmd{work\_tabl\_axis}, vue à la figure (...)
+
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+CREATE TABLE tibet.work_table_site_axis(
+  datetime STRING,
+  values ARRAY<FLOAT>
+)
+COMMENT 'Work table, values containe all sites measures for the same datetime.'
+PARTITIONED BY (season STRING)
+CLUSTERED BY(datetime) INTO 4 BUCKETS
+ROW FORMAT DELIMITED   
+FIELDS TERMINATED BY ','
+STORED AS ORC;
+\end{lstlisting}
+\caption{Création de la première table de travail pour les LD 1 \& 3}
+\end{figure}
+
+\par Cette table va donc nous permettre d’itérer sur moins de lignes (nombre divisé par 100 ce qui nous donne uniquement “305409 lignes”). Également elle nous permet de supprimer une agrégation coûteuse (GROUP BY datetime).
+
+\begin{block}{Note important} Nous aurions pu remplir cette table directement avec la somme demandé dans le sujet. Mais conservant la structure d’Array d’autres opérations, comme  la Moyenne, le min, le max peuvent être réalisée grâce à cette table.
+\end{block}
+Une fois construite, elle est alors remplie à l’aide de la commande suivante. Lors de la dernière exécution de cette requête le jobbrowser indique un temps de remplissage de 24\hc51 min :
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+FROM view_work_table
+INSERT OVERWRITE TABLE work_table_site_axis PARTITION (season)
+SELECT dttm_utc AS datetime,
+COLLECT_LIST(value) AS values
+season(dttm_utc) AS season
+GROUP BY dttm_utc ORDER BY dttm_utc;
+\end{lstlisting}
+\caption{Remplissage de la table work\_table\_site\_axis}
+\end{figure}
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{10} Resources: Documentation Hive, \link{https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF\#LanguageManualUDF-Built-inAggregateFunctions(UDAF)}{Language manual UDF} }
+}
+% -- Note en pied de page
+
+\par La table que nous avons construite un Array de type <FLOAT>. Nous nous appuyons donc sur la documentation Hive\textsuperscript{10}   pour trouver une UDF prédéfinie retournant un type Array. \sqlcmd{Collect\_list} est une UDAF qui va regrouper les éléments de la colonnes value conformément à l’agrégation GROUP BY \sqlcmd{dttm\_utc}.\newline
+
+\begin{block}{Note}la table \sqlcmd{view\_work\_table} est une vue réalisant la jointure entre les tables \sqlcmd{all\_records} et \sqlcmd{all\_sites}. Cette jointure est nécessaire pour le remplissage de toutes les tables que nous allons créer. Nous l’utilisons donc pour simplifier les requêtes de remplissage.\newline
+\end{block}
+
+\textbf{Remarque} (sur l’UDF collect\_list): la fonction \sqlcmd{COLLECT\_LIST} est à bien différentier de \sqlcmd{COLLECT\_SET}, qui elle, ne conserve pas les dupliquas. Une valeur ne peut alors paraître qu’une fois dans l’array. Après avoir rencontré cette nuance nous évaluons la construction de la table avec la commande suivante:\newline
+\begin{tt}
+SELECT datetime, size(values) FROM work\_table\_site\_axis ORDER BY datetime; \newline
+\end{tt}
+La requête indique que la plupart\textsuperscript{11} des colonnes values propose bien 100 valeurs. Une fois la table remplie, on exécute les deux requêtes suivantes qui vont respectivement répondre aux questions 1 et 3.
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{11}On remarque que certaines mesures peuvent sauter. Il y a des cellules de 99 ou 98 valeures }
+}
+
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{12} 54 lignes avec la fonction getweek, 52 lignes avec la fonction weekoftheyear }
+}
+% -- Note en pied de page
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT datetime AS datetime, arraysum(values) AS total
+FROM work_table_site_axis 
+ORDER BY datetime;
+\end{lstlisting}
+\caption{Requête de calcul de la loadcurve 1}
+\end{figure}
+
+\par le tableau suivant présente la forme du résultat de la requête précédente. 105407 linges sont retournées. Le JobBrowser indique une durée de \jb{2:08min}.
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+datetime&total\\ \hline
+2015-01-01 00\hc05\hc00&***\\ \hline
+2015-01-01 00\hc10\hc00&***\\ \hline
+...&...\\ \hline
+\end{tabular}
+\caption{Forme de la réponse pour la LD1}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT getweek(datetime) AS week, SUM(arraysum(values)) AS total
+FROM work_table_site_axis
+GROUP BY getweek(datetime)
+ORDER BY week;
+\end{lstlisting}
+\caption{Requête de calcul de la LD3}
+\end{figure}
+
+\par le tableau suivant présente la forme du résultat de la requête précédente. 52 linges sont retournées. Le JobBrowser indique une durée de \jb{2:12min}.
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+datetime&total\\ \hline
+week n°1&***\\ \hline
+week n°2&***\\ \hline
+...&...\\ \hline
+\end{tabular}
+\caption{Forme de la réponse pour la LD3}
+\end{figure}
+
+\par A la ligne 1 de la figure 5.5 la fonction \sqlcmd{getweek} est une UDF crée par notre groupe. Elle prend un en entré un text au format date ou datetime (\begin{tt}yyyy-MM-dd\end{tt} ou \begin{tt}yyyy-MM-dd HH:mm:ss\end{tt}) et retourne un numéro de semaine. En cherchant dans la documentation Hive on trouve aussi \sqlcmd{weekoftheyear} qui retourne un nombre de 1 à 53. On conserve alors notre fonction qui se différencie en indiquant l'année et le numéro de semaine. Elle peut donc potentiellement être utilisée sur plusieurs années. C'est aussi l'occasion de présenté la dépendance Joda-Time\textsuperscript{13}. Le code suivant présente la foncion pour récupérer les numéros de semaine. 
+
+% -- Note en pied de page
+{\let\thefootnote\relax\footnotetext{
+  \textsuperscript{13} \link{http://www.joda.org/joda-time/}{Joda-Time} Library java de gestion des dates. L'intégralité du code (documenté et testé) pour le projet Bigdata peut être récupéré sur le \link{https://github.com/DivLoic/Bamboo}{Répository du Groupe Pandas}} 
+}
+% -- Note en pied de page
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=JAVA]
+  /**
+   * Take a datetime format like: 2011-12-31 01:05:00 <br/>
+	 * Return {YEAR} / week {week number} <br/>
+	 * Usage: SELECT getweek(dttm_utc) as week, SUM(value) FROM ... 
+   * GROUP BY getweek(dttm_utc);
+	 * @param dateTime
+	 * @return
+	 */
+	public Text evaluate(Text dateTime){
+		DateTime dtt = Bamboo.dateParse(dateTime.toString());
+		if (dtt == null ) return new Text("NULL");
+		String w = dtt.getWeekyear() + " / week:" + dtt.getWeekOfWeekyear();
+		return new Text(w);
+	}
+\end{lstlisting}
+\caption{Code de la fonnction getweek.}
+\end{figure}
+
+\par Enfin la fonction \sqlcmd{arraysum} est aussi une UDF crée par le groupe Pandas. Elle réalise simplement la somme des éléments de type Array<FLOAT>. Contrairement à \sqlcmd{weekoftheyear} nous ne trouvons pas d'UDF prédéfinie permétant de d'exécuter cette tâche, bien qu'il existe d'autres fonctions comme \sqlcmd{size}, \sqlcmd{explode} etc...
+Nous \textbf{supposons} donc que cette fonction n'exite pas à cause du type paramétrique. En effet le type de la collone est Array<T>. Si l'oppération "+" n'est pas définie pour le type T la somme n'est pas possible. Par exemple faire la somme d'un array de char ne veut rien dire. 
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=JAVA]
+  /**
+	 * Take a column name with a Hive Array(float) type and <br/>
+	 * return the sum of the column for the current row.
+	 * @param col
+	 * @return
+	 */
+	public FloatWritable evaluate(ArrayList<FloatWritable> col){
+		float res = 0;
+		for (FloatWritable c : col){ res += c.get(); }
+		return new FloatWritable(res);
+	}
+\end{lstlisting}
+\caption{Code de la fonnction arraysum.}
+\end{figure}
+
+\newpage
