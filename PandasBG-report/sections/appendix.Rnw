@@ -1,0 +1,63 @@
+\chapter{Annexe}
+\par Workflow de l'équipe Pandas
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/githubgraph.png}
+\end{figure}
+\textit{Gestion des verversions du \link{https://github.com/DivLoic/Bamboo}{projet Bamboo}}
+\end{center}
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/testjava.png}
+\end{figure}
+\textit{Testes unitaires au coeur du développement des UDFs}
+\end{center} 
+
+\newpage Exploration et plot sous python
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/python1.png}
+\includegraphics[scale=1]{image/python2.png}
+\end{figure}
+%\textit{Testes unitaires au coeur du développement des UDFs}
+\end{center}
+
+%\begin{center}
+%\begin{figure}[h!]
+%\centering
+
+%\end{figure}
+%\textit{Testes unitaires au coeur du développement des UDFs}
+%\end{center}
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/python3.png}
+\end{figure}
+%\textit{Testes unitaires au coeur du développement des UDFs}
+\end{center}
+
+\par Recherche des températures avec R
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/r1.png}
+\end{figure}
+\textit{Retrouver intégralité du \link{https://gist.github.com/RomainPhilippe/8f85bf7be7f46b364533}{code R} pour le projet}
+\end{center}
+
+\par Matériel \& Ressouces
+\begin{itemize}
+\item[-] Notre ébergeure Kimsufi: \link{https://www.kimsufi.com/fr/}{https://www.kimsufi.com/fr/index.xml}
+\item[-]Documentation du \link{https://cwiki.apache.org/confluence/display/Hive/LanguageManual}{Hive Query Language}
+\item[-]Blog Hortonwork \link{http://hortonworks.com/blog/5-ways-make-hive-queries-run-faster/}{http://hortonworks.com/blog/5-ways-make-hive-queries-run-faster/}
+\item[-] Code du rapport disponible sur \link{https://github.com/DivLoic/ReportX/tree/master/PandasBG-report}{Github}.
+\end{itemize}

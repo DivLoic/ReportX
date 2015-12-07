@@ -47,7 +47,7 @@
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.2]{image/linets.png}
-\caption{Possibilité de choisir une industrie et faire la différence par rapport à la moyenne de son industrie}
+\caption{Différence par rapport à la moyenne de son industrie pour un site au choix}
 \end{figure}
 \end{center}
 
@@ -71,9 +71,9 @@ Nous avons très vite écartés cette car nous avons trouvé que la plupart des 
 Nous nous sommes alors tourné vers les données collectées par l’état américain : NOAA (National Centers For Environmental Information). Cet organisme fournit des données de qualité sur différents indicateurs, force du vent, humidité et température moyenne. Il met à disposition des serveurs FTP. Voici plusieurs liens utiles :
 \begin{itemize}
 \item[-]
-\item[-]\link{ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt}{ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt} permet de comprendre les données, les unités, les différentes colonnes, le lien entre les fichiers etc.
-\item[-]\link{ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv}{ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv} liste les stations météorologiques disponibles.
-\item[-]\link{ftp.ncdc.noaa.gov/pub/data/gsod/2012/}{ftp.ncdc.noaa.gov/pub/data/gsod/2012/} contient l’ensemble des données de l’année 2012 pour les différentes stations.
+\item[-]\link{ftp://ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt}{ftp.ncdc.noaa.gov/pub/data/gsod/readme.txt} permet de comprendre les données, les unités, les différentes colonnes, le lien entre les fichiers etc.
+\item[-]\link{ftp://ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv}{ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.csv} liste les stations météorologiques disponibles.
+\item[-]\link{ftp://ftp.ncdc.noaa.gov/pub/data/gsod/2012/}{ftp.ncdc.noaa.gov/pub/data/gsod/2012/} contient l’ensemble des données de l’année 2012 pour les différentes stations.
 \end{itemize}
 
 Nous avons téléchargé ces fichiers en local pour avoir un aperçu des données dans le but de connaître la véracité de ces dernières.

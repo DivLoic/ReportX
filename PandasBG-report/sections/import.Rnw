@@ -22,7 +22,7 @@
 }
 %    %
 {\let\thefootnote\relax\footnotetext{
-  \textsuperscript{4} Nombre de secondes écoulées depuis 1er janvier 1970 00:00:00 UTC
+  \textsuperscript{4} Nombre de secondes écoulées depuis 1er janvier 1970 00\hc 00\hc 00 UTC
   }
 }
 % -- Note en pied de page
@@ -46,7 +46,7 @@ Puis décompressée:
 \begin{tabular}{|l|l|}
 \hline
 timestamp&Date de la mesure au format POSIX\textsuperscript{4} \\ \hline
-dttm\_utc&Conversion de la date au format UTC (yyyy-MM-dd HH:mm:ss)\\ \hline
+dttm\_utc&Conversion de la date au format UTC (yyyy-MM-dd HH\hc mm\hc ss)\\ \hline
 value&Consommation en kWh\\ \hline
 estimated&Boolean pour savoir si la valeur est estimée\\ \hline
 anomaly&Indicateur pour savoir si la valeur est erronée\\ \hline

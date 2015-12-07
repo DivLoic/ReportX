@@ -56,6 +56,8 @@ GROUP BY industry ORDER BY ratio;
 \caption{Requête de calcul de la LD5BIS}
 \end{figure}
 
+\par Ici le résultat a une taille assez raisonnable pour être placé dans le rapport. Le graphe qui suit reprend le résultat de la requête 5 en collorant les différentes inductries. La total de la puissance consomée par toutes les industries s'élève à 10846 kWh par pieds carrés. L'industrie la plus consommatrice est "Light Industrial" avec 8911 kWh/sqft. La load curve 6 propose de retrouver exactement le même résultat mais avec une \textit{user define function}. Nous introdusons donc une fonction UADF qui va réaliser à la fois le ratio entre les colones \sqlcmd{value} et \sqlcmd{sq\_ft} mais aussi comprendre la clause \begin{tt}GROUP BY\end{tt} et sommer les ratios de même industry.
+
 \begin{figure}[h!]
 \centering
 \begin{tabular}{|c|c|c|}
@@ -89,3 +91,106 @@ Light Industrial&SUMMER&2441.62428432\\ \hline
 \caption{Pie chart du ration consomation/suface par industry}
 \end{figure}
 \end{center}
+
+
+\newpage
+
+\par Ratio est une UDAF développée par notre groupe. Elle prend en paramètre deux colonnes, réalise leur ratio et retourne la somme des ratios en fonction de la clause GROUP BY.
+Nous proposons donc maintenant de commenter la construction de l’UDAF.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=JAVA]
+package org.isep.pandas.udaf;
+
+import org.apache.hadoop.hive.ql.exec.UDAF;
+import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
+import org.apache.hadoop.io.FloatWritable;
+
+@SuppressWarnings("deprecation")
+public class RatioUDAF extends UDAF{
+
+  public static class UDAFRatioState {
+    private long mCount;
+    private float mRatio;
+  }
+
+  public static class Ratio implements UDAFEvaluator{
+  
+    UDAFRatioState state;
+    public Ratio(){
+      super();
+      state = new UDAFRatioState();
+      init();
+    }
+
+    public void init() {
+      // TODO Auto-generated method stub
+      this.state.mCount = 0;
+      this.state.mRatio = 0;
+    }
+
+    public void iterate(FloatWritable value, FloatWritable area){
+      if (value != null) {
+        this.state.mCount ++;
+        this.state.mRatio += (value.get() / area.get());
+      }
+    }
+
+    public UDAFRatioState terminatePartial() {
+      return state.mCount == 0 ? null : state;
+    }
+
+    public boolean merge(UDAFRatioState uss) {
+      if (uss != null) {
+        state.mRatio += uss.mRatio;
+        state.mCount += uss.mCount;
+      }
+      return true;
+    }
+
+    public FloatWritable terminate() {
+      return new FloatWritable(state.mRatio);
+    }
+  }
+}
+\end{lstlisting}
+\caption{UDAF: ratio}
+\end{figure}
+
+\newpage Avant tout, la fonction doit étendre la classe abstraite UDAF.
+On crée une classe état (comme un compteur) qui est retourné par notre fonction en fin de job.
+On implémente la fonction iterate qui définie l’opération à exécuter sur chaque ligne. Cette fonction modifie l’état (UDAFRatioState) courant de l’objet RatioUDAF.
+
+\par On implémente alors une fonction terminatePartial sous les conseils de la documentation Hive. Cette fonction retourne un “objet état”.
+Remarque: Avec cette fonction, nous supposons que notre UDAF peut être parallèlisée sur différents blocs de données. terminatePartial interviendrait donc à la fin du traitement d’un bloc. Le résultat (sous la forme d’une class UDAFRatioState) serait récupéré par un reducer qui collecterait l'ensemble des résultats. Ce qui fait le lien avec la méthode suivante merge, qui elle, récupère un objet état. Cette UDAF nous permet ainsi d’écrire une requête classant les industries au total et par saison plus simplement.
+
+\par Finalement, il est intéressant de regarder quel est le jour de l’année où la consommation est la plus importante pour chaque site. Pour cela, nous avons exécuté la requête suivante :
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+FROM (
+  SELECT MAX(value) AS maximum, site_id AS id 
+  FROM work_table_day_axis GROUP BY site_id
+) AS tbl 
+JOIN work_table_day_axis ON work_table_day_axis.site_id = tbl.id
+SELECT tbl.id, work_table_day_axis.date, 
+tbl.maximum WHERE site_id = tbl.id and value= tbl.maximum;
+\end{lstlisting}
+\caption{Requête de calcul de la LD7}
+\end{figure}
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/frizz.png}
+\newline
+\includegraphics[scale=1]{image/frizz2.png}
+\caption{Chronologie des maximum: LD7}
+\end{figure}
+\end{center}
+
+\newpage
+

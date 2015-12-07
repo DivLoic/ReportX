@@ -1,0 +1,16 @@
+
+\par Dans le cadre du module de notre parcours Big Data, nous avons réalisé un projet utilisant l’éco-système Hadoop, le datawarehouse Hive, le langage Hiveql  et Tableau Software, qui nous permettent d’analyser les données de consommation électrique d’Enernoc. Le présent rapport a été rédigé par l’équipe Pandas composée de CHANTHAVONG Delphine, RASOLOMALALA Narisely, PHILIPPE Romain et DIVAD Loïc.
+
+\par Le but de ce projet était avant tout de comprendre comment s’utilise ces technologies Big Data sur un exemple concret, mais aussi de maîtriser les outils vus durant les cours et TP comme Hadoop et Tableau. 
+Après 3 mois de travail, nous sommes fiers de vous fournir le fruit du travail de notre équipe synthétisé dans ce rapport.
+
+\par Vous trouverez donc dans cette synthèse, la façon dont nous avons abordé et traité le sujet, nos ressources, les difficultés rencontrées et surtout les solutions que nous apportons à l’analyse des données qui nous ont été fournies.
+
+Nous suivrons tout au long de ce rapport les conventions suivantes :
+\begin{itemize}
+\item[-]En bleu : \sqlcmd{nom des tables}
+\item[-]En rouge : \jb{temps} d’exécution d’une requête
+\item[-]Les commandes UNIX sont précédées d’un \begin{tt}\textit{dollar et sont en italiques}\end{tt}.
+\item[-]\textbf{PSV1, PSV2 et PSV3} font référence à trois servers.
+\end{itemize}
+

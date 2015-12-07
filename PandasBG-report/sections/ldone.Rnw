@@ -11,7 +11,7 @@
 \item[-] Calculate the total LD for the 100 sites (timestamp interval: a week)
 \end{itemize}
 
-\par Hive propose plusieurs types complexes, dont Array<T>. C’est une structure de données indexées qui peut contenir plusieurs éléments de type T. On s’en servira comme les types : INT, FLOAT ou encore STRING en l'assignant à une colonnes values. Le code suivant est la requête Hive pour créer la table \sqlcmd{work\_tabl\_axis}, vue à la figure (...)
+\par Hive propose plusieurs types complexes, dont Array<T>. C’est une structure de données indexées qui peut contenir plusieurs éléments de type T. On s’en servira comme les types : INT, FLOAT ou encore STRING en l'assignant à une colonne value. Le code suivant est la requête Hive pour créer la table \sqlcmd{work\_table\_axis}, vue à la figure (...)
 
 
 \begin{figure}[h!]
@@ -33,9 +33,9 @@ STORED AS ORC;
 
 \par Cette table va donc nous permettre d’itérer sur moins de lignes (nombre divisé par 100 ce qui nous donne uniquement “305409 lignes”). Également elle nous permet de supprimer une agrégation coûteuse (GROUP BY datetime).
 
-\begin{block}{Note important} Nous aurions pu remplir cette table directement avec la somme demandé dans le sujet. Mais conservant la structure d’Array d’autres opérations, comme  la Moyenne, le min, le max peuvent être réalisée grâce à cette table.
+\begin{block}{Note importante} Nous aurions pu remplir cette table directement avec la somme demandée dans le sujet. Cependant, en conservant la structure Array il est possible de réaliser d’autres opérations, comme  la Moyenne, le min, le max peuvent être réalisée grâce à cette table.
 \end{block}
-Une fois construite, elle est alors remplie à l’aide de la commande suivante. Lors de la dernière exécution de cette requête le jobbrowser indique un temps de remplissage de 24\hc51 min :
+Une fois construite, elle est alors remplie à l’aide de la commande suivante. Lors de la dernière exécution de cette requête le Job Browser indique un temps de remplissage de 24\hc51 min :
 
 \begin{figure}[h!]
 \centering
@@ -56,12 +56,12 @@ GROUP BY dttm_utc ORDER BY dttm_utc;
 }
 % -- Note en pied de page
 
-\par La table que nous avons construite un Array de type <FLOAT>. Nous nous appuyons donc sur la documentation Hive\textsuperscript{10}   pour trouver une UDF prédéfinie retournant un type Array. \sqlcmd{Collect\_list} est une UDAF qui va regrouper les éléments de la colonnes value conformément à l’agrégation GROUP BY \sqlcmd{dttm\_utc}.\newline
+\par La table que nous avons construite un Array de type <FLOAT>. Nous nous sommes appuyés donc sur la documentation Hive\textsuperscript{10}   pour trouver une UDF prédéfinie retournant un type Array. \sqlcmd{Collect\_list} est une UDAF qui va regrouper les éléments de la colonne \sqlcmd{value} par rapport à la clause GROUP BY \sqlcmd{dttm\_utc}.\newline
 
 \begin{block}{Note}la table \sqlcmd{view\_work\_table} est une vue réalisant la jointure entre les tables \sqlcmd{all\_records} et \sqlcmd{all\_sites}. Cette jointure est nécessaire pour le remplissage de toutes les tables que nous allons créer. Nous l’utilisons donc pour simplifier les requêtes de remplissage.\newline
 \end{block}
 
-\textbf{Remarque} (sur l’UDF collect\_list): la fonction \sqlcmd{COLLECT\_LIST} est à bien différentier de \sqlcmd{COLLECT\_SET}, qui elle, ne conserve pas les dupliquas. Une valeur ne peut alors paraître qu’une fois dans l’array. Après avoir rencontré cette nuance nous évaluons la construction de la table avec la commande suivante:\newline
+\textbf{Remarque} (sur l’UDF collect\_list): la fonction \sqlcmd{COLLECT\_LIST} est à bien différencier de \sqlcmd{COLLECT\_SET}, qui elle, ne conserve pas les dupliquas. Une valeur ne peut alors paraître qu’une fois dans l’array. Après avoir rencontré cette nuance nous évaluons la construction de la table avec la commande suivante:\newline
 \begin{tt}
 SELECT datetime, size(values) FROM work\_table\_site\_axis ORDER BY datetime; \newline
 \end{tt}
@@ -84,10 +84,10 @@ SELECT datetime AS datetime, arraysum(values) AS total
 FROM work_table_site_axis 
 ORDER BY datetime;
 \end{lstlisting}
-\caption{Requête de calcul de la loadcurve 1}
+\caption{Requête de calcul de la LD1}
 \end{figure}
 
-\par le tableau suivant présente la forme du résultat de la requête précédente. 105407 linges sont retournées. Le JobBrowser indique une durée de \jb{2:08min}.
+\par Le tableau suivant présente la forme du résultat de la requête précédente. 105407 lignes sont retournées. Le JobBrowser indique une durée de \jb{2:08min}.
 
 \begin{figure}[h!]
 \centering
@@ -105,14 +105,13 @@ datetime&total\\ \hline
 \centering
 \begin{lstlisting}[language=SQL]
 SELECT getweek(datetime) AS week, SUM(arraysum(values)) AS total
-FROM work_table_site_axis
-GROUP BY getweek(datetime)
+FROM work_table_site_axis GROUP BY getweek(datetime)
 ORDER BY week;
 \end{lstlisting}
 \caption{Requête de calcul de la LD3}
 \end{figure}
 
-\par le tableau suivant présente la forme du résultat de la requête précédente. 52 linges sont retournées. Le JobBrowser indique une durée de \jb{2:12min}.
+\par Le tableau suivant présente la forme du résultat de la requête précédente. 52 lignes sont retournées. Le JobBrowser indique une durée de \jb{2:12min}.
 
 \begin{figure}[h!]
 \centering
@@ -126,11 +125,11 @@ week n°2&***\\ \hline
 \caption{Forme de la réponse pour la LD3}
 \end{figure}
 
-\par A la ligne 1 de la figure 5.5 la fonction \sqlcmd{getweek} est une UDF crée par notre groupe. Elle prend un en entré un text au format date ou datetime (\begin{tt}yyyy-MM-dd\end{tt} ou \begin{tt}yyyy-MM-dd HH:mm:ss\end{tt}) et retourne un numéro de semaine. En cherchant dans la documentation Hive on trouve aussi \sqlcmd{weekoftheyear} qui retourne un nombre de 1 à 53. On conserve alors notre fonction qui se différencie en indiquant l'année et le numéro de semaine. Elle peut donc potentiellement être utilisée sur plusieurs années. C'est aussi l'occasion de présenté la dépendance Joda-Time\textsuperscript{13}. Le code suivant présente la foncion pour récupérer les numéros de semaine. 
+\par A la ligne 1 de la figure 5.5 la fonction \sqlcmd{getweek} est une UDF créée par notre groupe. Elle prend en entré un texte au format date ou datetime (\begin{tt}yyyy-MM-dd\end{tt} ou \begin{tt}yyyy-MM-dd HH:mm:ss\end{tt}) et retourne un numéro de semaine. En cherchant dans la documentation Hive on trouve aussi \sqlcmd{weekoftheyear} qui retourne un nombre de 1 à 53. On conserve alors notre fonction qui se différencie en indiquant l'année et le numéro de semaine. Elle peut donc potentiellement être utilisée sur plusieurs années. C'est aussi l'occasion de présenter la dépendance Joda-Time\textsuperscript{13}. Le code suivant présente la fonction pour récupérer les numéros de semaine. 
 
 % -- Note en pied de page
 {\let\thefootnote\relax\footnotetext{
-  \textsuperscript{13} \link{http://www.joda.org/joda-time/}{Joda-Time} Library java de gestion des dates. L'intégralité du code (documenté et testé) pour le projet Bigdata peut être récupéré sur le \link{https://github.com/DivLoic/Bamboo}{Répository du Groupe Pandas}} 
+  \textsuperscript{13} \link{http://www.joda.org/joda-time/}{Joda-Time} bibliothèque java de gestion des dates. L'intégralité du code (documenté et testé) pour le projet Bigdata peut être récupéré sur le \link{https://github.com/DivLoic/Bamboo}{Répository du Groupe Pandas}} 
 }
 % -- Note en pied de page
 
@@ -152,11 +151,11 @@ week n°2&***\\ \hline
 		return new Text(w);
 	}
 \end{lstlisting}
-\caption{Code de la fonnction getweek.}
+\caption{Code de la fonction getweek.}
 \end{figure}
 
-\par Enfin la fonction \sqlcmd{arraysum} est aussi une UDF crée par le groupe Pandas. Elle réalise simplement la somme des éléments de type Array<FLOAT>. Contrairement à \sqlcmd{weekoftheyear} nous ne trouvons pas d'UDF prédéfinie permétant de d'exécuter cette tâche, bien qu'il existe d'autres fonctions comme \sqlcmd{size}, \sqlcmd{explode} etc...
-Nous \textbf{supposons} donc que cette fonction n'exite pas à cause du type paramétrique. En effet le type de la collone est Array<T>. Si l'oppération "+" n'est pas définie pour le type T la somme n'est pas possible. Par exemple faire la somme d'un array de char ne veut rien dire. 
+\par Enfin la fonction \sqlcmd{arraysum} est aussi une UDF créée par le groupe Pandas. Elle réalise simplement la somme des éléments de type Array<FLOAT>. Contrairement à \sqlcmd{weekoftheyear} nous ne trouvons pas d'UDF prédéfinie permettant de d'exécuter cette tâche, bien qu'il existe d'autres fonctions comme \sqlcmd{size}, \sqlcmd{explode} etc...
+Nous \textbf{supposons} donc que cette fonction n'existe pas à cause du type paramétrique. En effet le type de la collone est Array<T>. Si l'opération "+" n'est pas définie pour le type T la somme n'est pas possible. Par exemple faire la somme d'un array de char ne veut rien dire. 
 
 \begin{figure}[h!]
 \centering
@@ -173,7 +172,7 @@ Nous \textbf{supposons} donc que cette fonction n'exite pas à cause du type par
 		return new FloatWritable(res);
 	}
 \end{lstlisting}
-\caption{Code de la fonnction arraysum.}
+\caption{Code de la fonction arraysum.}
 \end{figure}
 
 \newpage

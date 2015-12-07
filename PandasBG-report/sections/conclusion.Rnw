@@ -1,0 +1,6 @@
+\par Ce projet nous a permis de proposer une solution BIG DATA avec différentes technologies : Hadoop, Hive, Hcatalog et Tableau Software. Nous avons également créé et utilisé des UDF qui permettent de créer des requêtes plus complexes. 
+L’outil Tableau met en valeur les différents aspects de la donnée : nous avons corrélé la température et la consommation, interprété la répartition de la consommation à travers les États-Unis, monté la différence entre un site de production en particulier avec la consommation moyenne par secteur. Ces présentations peuvent à termes mener à prendre plusieurs décisions sur la surcharge ou la sous-exploitation des sites. On peut également imaginer que la donnée température amène les actionnaires à concentrer les activités dans des régions plus propices.  
+
+\includegraphics[scale=0.2]{image/workflow.png}
+
+\par Finalement, c’est en travaillant tous ensemble et à l’aide de nombreuses ressources que nous sommes parvenus à nous mettre en situation d’un système d’information confronté à des problématiques Big Data et à proposer une solution.

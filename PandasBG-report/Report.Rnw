@@ -25,6 +25,14 @@
 
 \maketitle
 
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{image/PandasCorp.png}
+\end{figure}
+\textit{Equipe Pandas}
+\end{center}
+
 \tableofcontents
 
 \listoffigures
@@ -62,6 +70,8 @@
 
 \chapter{Introduction}
 
+\input{./sections/intro.Rnw}
+
 \chapter{Environnement de travail, outils et organisation.}
 
 \input{./sections/tools.Rnw}
@@ -86,15 +96,10 @@
 
 \chapter{Conclusion}
 
+\input{./sections/conclusion.Rnw}
+
 \appendix
 
-\chapter{Team work \& code sources du projets}
-\section{Workflow de l'équipe Panda}
-\section{Exploration et plot sous python}
-\section{Recherche des températures avec R}
-\chapter{Matériel}
-\chapter{Ressources}
-
-
+\input{./sections/appendix.Rnw}
 
 \end{document}

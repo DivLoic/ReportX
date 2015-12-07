@@ -19,7 +19,7 @@ Notre cluster est finalement installé. Nous présenterons donc une répartition
     
 \begin{tabular}{|c|c|c|c|}
 \hline
-Note&SV1&SV2&SV3\\ \hline
+Note&PSV1&PSV2&PSV3\\ \hline
 &Ambari serveur&&\\ \hline
 &&namenode&\\ \hline
 &&&sec namenode\\ \hline

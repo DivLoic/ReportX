@@ -1,3 +1,44 @@
 \section{Moyenne par industrie}
 
-\newpage 
+\begin{itemize}
+\item[-] Calculate the average LD by sector of activity (timestamp interval: 5 minutes) 
+\item[-] Calculate the average LD by sector of activity (timestamp interval: a week) 
+\end{itemize}
+
+\par Ici une seconde table de travail est crée pour prendre en compte les différentes industries. Les requête de création et remplissage de la tables ne se différencient donc pas énormément de la table préscédente. Seule une colonnes \sqlcmd{Industry} est rajoutée. Grace à elle la table est alors partitionée en par industry. Quatre sous dossier se créer alors dans le file système. Pour joustifier la création de ces deux tables très proche nous renvoyons à la note du chapitre 4 page 10 qui préscise que l'on remarque un différence entre les vitesse d'exécution. 
+
+\par nous ne présenterons donc pour cette partie que les reqêtes d'acquistion des loadcurves.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT datetime AS datetime, industry AS sector, 
+arrayavg(values) AS total FROM work_table_industry_axis
+ORDER BY datetime, sector;
+\end{lstlisting}
+\caption{Requête de calcul de la LD2}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=SQL]
+SELECT getweek(datetime) AS week, industry AS sector, 
+AVG(arrayavg(values)) AS total FROM work_table_industry_axis
+GROUP BY industry, getweek(datetime)
+ORDER BY week;
+\end{lstlisting}
+\caption{Requête de calcul de la LD4}
+\end{figure}
+
+Les reqûetes des LD2 et LD4 indiquent respectivement \jb{3:52min} et \jb{3:58min} dans le Job Browser. Le graphe suivant présente la moyenne semestrielle par industry sur une annnée (LD4).
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{image/LD4_WEEK.png}
+\caption{Représentation graphique de la série temporelle LD4}
+\end{figure}
+\end{center}
+
+\newpage
