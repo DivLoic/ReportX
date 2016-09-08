@@ -86,3 +86,7 @@ plugin install marvel-agent
 cluster.name: kafka-lab
 network.host: 0.0.0.0
 discovery.zen.ping.unicast.hosts: ["ip1", "ip2", "ip3"]
+
+
+# the data 
+wget https://dl.dropboxusercontent.com/u/299169754/ml4t.zip
