@@ -13,4 +13,4 @@
 *.Rproj
 *.RData
 *.lof
-PandasBG-report/.Rhistory
+*.Rhistory

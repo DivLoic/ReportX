@@ -76,8 +76,7 @@ ln n -s ../lib/node-v4.5.0-linux-x64/ node
 
 # plugin elasticsearch 
 plugin install mobz/elasticsearch-head
-plugin install license
-plugin install marvel-agent
+
 
 # WARNING 
 #elasticsearch -Des.insecure.allow.root=true
@@ -87,6 +86,47 @@ cluster.name: kafka-lab
 network.host: 0.0.0.0
 discovery.zen.ping.unicast.hosts: ["ip1", "ip2", "ip3"]
 
+# elasticsearch master
+node.master: true
+node.data: false
 
 # the data 
 wget https://dl.dropboxusercontent.com/u/299169754/ml4t.zip
+
+
+# create the index ... 
+curl -XPUT 'http://localhost:9200/stocks/'
+
+
+
+_________________________________________________________________
+
+paradigm publish subcribe :
+- Producers 
+- Consumers
+- Messages
+- topics
+
+
+# dl-kafka
+# wget http://apache.crihan.fr/dist/kafka/0.10.0.0/kafka_2.11-0.10.0.0.tgz
+
+# configure kafka 
+broker.id=*
+port=9094
+log.dir=/root/log/kafka
+
+
+# mkdir /root/log/kafka
+# mkdir /root/log/zookeeper
+# mkdir /root/data/zookeeper
+
+# $ bin/zookeeper-server-start.sh config/zookeeper.properties
+# $ bin/kafka-server-start.sh config/server.properties
+
+# configure kafka cluster
+
+
+### create topic
+# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+# bin/kafka-topics.sh --list --zookeeper localhost:2181 # how many topics ?
