@@ -11,47 +11,10 @@ echo "export TMOUT=0" >> ~/.profile
 touch ~/.userrc
 echo ". .userrc" >> ~/.bashrc
 vi .userrc 
+
 # add the profile template
 
-#!/bin/bash
 
-export PS1="\[\033[35;1m\]\]\w • \u $>\[\033[0m\]\]"
-
-export LIB_DIR=$HOME/lib
-export APP_DIR=$HOME/products
-export WORKDIR=$HOME/workspace
-
-# -- java
-export JAVA_HOME=$APP_DIR/java
-
-# -- scala
-export SBT_HOME=$APP_DIR/sbt
-export ACTIVATOR=$APP_DIR/activator
-export SCALA_HOME=$APP_DIR/scala
-
-# -- elasticsearch
-export ES_HOME=$APP_DIR/elasticsearch
-export KB_HOME=$APP_DIR/kiana
-
-# -- kafka
-export KFK_HOME=$APP_DIR/kafka
-
-# -- Node 
-export NODE_HOME=$APP_DIR/node
-
-# -- Python
-export CONDA_HOME=$APP_DIR/anaconda
-alias jup='jupyter notebook --port 3333 --notebook-dir=$HOME/notebook'
-
-export PATH=$JAVA_HOME/bin:$PATH
-export PATH=$CONDA_HOME/bin:$PATH
-export PATH=$SBT_HOME/bin:$PATH
-export PATH=$SCALA_HOME/bin:$PATH
-export PATH=$ACTIVATOR/bin:$PATH
-export PATH=$ES_HOME/bin:$PATH
-export PATH=$KFK_HOME/bin:$PATH
-export PATH=$NODE_HOME/bin:$PATH
-export PATH=$KB_HOME/bin:$PATH
 
 # we dl the sofware
 
