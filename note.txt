@@ -1,0 +1,18 @@
+$ wget https://link/dl/idae
+$ sudo su
+$ mv ideaIC-XX.Y.Z /opt/idea
+$ vim idea.desktop 
+# [Desktop Entry]
+# Name=IntelliJ IDEA 
+# Type=Application
+# Exec=idea.sh
+# Terminal=false
+# Icon=idea
+# Comment=Integrated Development Environment
+# NoDisplay=false
+# Categories=Development;IDE;
+# Name[en]=IntelliJ IDEA
+$ desktop-file-install idea.desktop
+$ cd /usr/local/bin
+$ ln -s /opt/idea/bin/idea.sh /usr/local/bin/idea.sh
+$ cp /opt/idea/bin/idea.png /usr/share/pixmaps/idea.png
